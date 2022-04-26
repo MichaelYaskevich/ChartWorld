@@ -1,6 +1,6 @@
-﻿namespace ChartWorld
+﻿namespace ChartWorld.Application
 {
-    partial class Form1
+    partial class ChartWindow
     {
         /// <summary>
         ///  Required designer variable.
