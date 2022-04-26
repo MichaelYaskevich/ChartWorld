@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using ChartWorld.Application;
+using ChartWorld.App;
 
 namespace ChartWorld
 {
