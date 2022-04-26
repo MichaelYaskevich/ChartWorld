@@ -6,7 +6,7 @@ namespace ChartWorld.Chart
 {
     public interface IChart : IWorkspaceEntity
     {
-        public IChartData Data { get; set; }
+        public ChartData Data { get; set; }
 
         public IChart BuildChart();
     }

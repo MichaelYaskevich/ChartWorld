@@ -5,7 +5,7 @@ namespace ChartWorld.Chart
 {
     public class BarChart : IChart
     {
-        public IChartData Data { get; set; }
+        public ChartData Data { get; set; }
 
         public IChart BuildChart()
         {
