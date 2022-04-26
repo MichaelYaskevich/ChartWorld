@@ -9,8 +9,8 @@ namespace ChartWorld.Tests.Statistic
         [Test]
         public static void Test1()
         {
-            var chartData = new ChartData(
-                "D:\\The_p\\prog\\c#\\ChartWorld\\ChartWorld\\Tests\\Resources\\ChartDataWithOneValueForName.csv");
+            // var chartData = new ChartData(
+            //     "D:\\The_p\\prog\\c#\\ChartWorld\\ChartWorld\\Tests\\Resources\\ChartDataWithOneValueForName.csv");
             
         }
     }
