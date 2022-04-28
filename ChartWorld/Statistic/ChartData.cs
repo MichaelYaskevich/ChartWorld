@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using CsvHelper;
 
 namespace ChartWorld.Statistic
 {
@@ -7,11 +11,36 @@ namespace ChartWorld.Statistic
     {
         private Dictionary<string, double> Dictionary { get; } = new();
         private List<string> Keys { get; } = new();
-
-        public IEnumerable<(string, double)> GetItems()
+        
+        public ChartData(Stream csvStream)
         {
-            return Keys.Select(key => (key, Dictionary[key]));
+            using (var csvReader = new StreamReader(csvStream))
+            using (var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var columnCount = csv.HeaderRecord.Length;
+                    for (var i = 1; i < columnCount; i++)
+                    {
+                        var keySuffix = columnCount > 2 ? $"#{i}" : "";
+                        TryAdd(
+                            $"{csv.GetField(csv.HeaderRecord[0])}{keySuffix}", 
+                            Convert.ToDouble(csv.GetField(csv.HeaderRecord[i])));
+                    }
+                }
+            }
         }
+
+        public IEnumerable<(string, double)> GetItems() 
+            => Keys.Select(key => (key, Dictionary[key]));
+
+        public IEnumerable<string> GetKeys() 
+            => Keys;
+
+        public IEnumerable<double> GetValues() 
+            => Keys.Select(key => Dictionary[key]);
 
         public bool TryGetValue(string key, out double result)
         {
