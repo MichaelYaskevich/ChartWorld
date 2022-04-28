@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Gb4MTHLXG2qizBhjgKBlnRkhW8o8C4/GzzLdO1x1dPWv3H9CaWWxdP2eM2BiziZI4diowI9cPM8TdMzo/twc0w==",
+  "dgSpecHash": "86CUHb1kH/SzaNSd6iqCQdofXVEXkUITmS6XfaHw84baaQwHTgzJJB+puqgBGvrWXQ2BTxlsWs5QX18Y8rbHqQ==",
   "success": true,
   "projectFilePath": "D:\\The_p\\prog\\c#\\ChartWorld\\ChartWorld\\ChartWorld.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\The_p\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\The_p\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
+    "C:\\Users\\The_p\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512"
+  ],
   "logs": []
 }
