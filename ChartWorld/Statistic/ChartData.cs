@@ -3,15 +3,27 @@ using System.Linq;
 
 namespace ChartWorld.Statistic
 {
-    public class ChartData
+    public class ChartData : IChartData
     {
         private Dictionary<string, double> Dictionary { get; } = new();
         private List<string> Keys { get; } = new();
 
-        public IEnumerable<(string, double)> GetItems()
+        public ChartData(IEnumerable<(string, double)> items)
         {
-            return Keys.Select(key => (key, Dictionary[key]));
+            foreach (var (key, value) in items)
+                TryAdd(key, value);
         }
+
+        public ChartData(string csvPath) : this(CsvParserForChartData.Parse(csvPath)) { }
+
+        public IEnumerable<(string, double)> GetItems() 
+            => Keys.Select(key => (key, Dictionary[key]));
+
+        public IEnumerable<string> GetKeys() 
+            => Keys;
+
+        public IEnumerable<double> GetValues() 
+            => Keys.Select(key => Dictionary[key]);
 
         public bool TryGetValue(string key, out double result)
         {
