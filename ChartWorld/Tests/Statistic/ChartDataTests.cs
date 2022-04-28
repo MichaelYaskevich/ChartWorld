@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using ChartWorld.Statistic;
+﻿using ChartWorld.Statistic;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -26,11 +25,7 @@ namespace ChartWorld.Tests.Statistic
             TestName = "ChartDataWithManyValuesForName")]
         public static void ChartDataCtorParseCsvRight(string csvPath, string[] keys, double[] values)
         {
-            var stream = Assembly
-                .GetExecutingAssembly()
-                .GetManifestResourceStream(csvPath);
-
-            var chartData = new ChartData(stream);
+            var chartData = new ChartData(csvPath);
 
             chartData.GetItems().Should().HaveCount(values.Length);
             chartData.GetKeys().Should().Equal(keys);

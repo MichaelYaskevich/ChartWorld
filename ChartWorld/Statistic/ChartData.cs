@@ -1,37 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using CsvHelper;
 
 namespace ChartWorld.Statistic
 {
-    public class ChartData
+    public class ChartData : IChartData
     {
         private Dictionary<string, double> Dictionary { get; } = new();
         private List<string> Keys { get; } = new();
-        
-        public ChartData(Stream csvStream)
+
+        public ChartData(IEnumerable<(string, double)> items)
         {
-            using (var csvReader = new StreamReader(csvStream))
-            using (var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture))
-            {
-                csv.Read();
-                csv.ReadHeader();
-                while (csv.Read())
-                {
-                    var columnCount = csv.HeaderRecord.Length;
-                    for (var i = 1; i < columnCount; i++)
-                    {
-                        var keySuffix = columnCount > 2 ? $"#{i}" : "";
-                        TryAdd(
-                            $"{csv.GetField(csv.HeaderRecord[0])}{keySuffix}", 
-                            Convert.ToDouble(csv.GetField(csv.HeaderRecord[i])));
-                    }
-                }
-            }
+            foreach (var (key, value) in items)
+                TryAdd(key, value);
         }
+
+        public ChartData(string csvPath) : this(CsvParserForChartData.Parse(csvPath)) { }
 
         public IEnumerable<(string, double)> GetItems() 
             => Keys.Select(key => (key, Dictionary[key]));
