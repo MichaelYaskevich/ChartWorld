@@ -1,4 +1,7 @@
 .idea/
+/.idea/
+.idea*/
+.idea
 global.json/
 ChartWorld/bin/
 #Ignore thumbnails created by Windows
