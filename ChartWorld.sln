@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChartWorld", "ChartWorld\ChartWorld.csproj", "{30661E3D-33FE-4F7A-B5F2-3C5C3628ED89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{8277FB5B-FBD2-428B-B50A-0A4F0168442F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{30661E3D-33FE-4F7A-B5F2-3C5C3628ED89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30661E3D-33FE-4F7A-B5F2-3C5C3628ED89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30661E3D-33FE-4F7A-B5F2-3C5C3628ED89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8277FB5B-FBD2-428B-B50A-0A4F0168442F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8277FB5B-FBD2-428B-B50A-0A4F0168442F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8277FB5B-FBD2-428B-B50A-0A4F0168442F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8277FB5B-FBD2-428B-B50A-0A4F0168442F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

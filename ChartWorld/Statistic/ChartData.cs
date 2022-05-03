@@ -16,13 +16,13 @@ namespace ChartWorld.Statistic
 
         public ChartData(string csvPath) : this(CsvParserForChartData.Parse(csvPath)) { }
 
-        public IEnumerable<(string, double)> GetItems() 
+        public IEnumerable<(string, double)> GetOrderedItems() 
             => Keys.Select(key => (key, Dictionary[key]));
 
-        public IEnumerable<string> GetKeys() 
+        public IEnumerable<string> GetOrderedKeys() 
             => Keys;
 
-        public IEnumerable<double> GetValues() 
+        public IEnumerable<double> GetOrderedValues() 
             => Keys.Select(key => Dictionary[key]);
 
         public bool TryGetValue(string key, out double result)
@@ -44,6 +44,12 @@ namespace ChartWorld.Statistic
             Keys.Add(key);
             Dictionary.Add(key, value);
             return true;
+        }
+
+        public ChartData CreateChartDataWithValues(List<double> values)
+        {
+            return new ChartData(values
+                .Select((v, i) => (Keys[i], v)));
         }
     }
 }

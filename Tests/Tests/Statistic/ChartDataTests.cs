@@ -27,9 +27,9 @@ namespace ChartWorld.Tests.Statistic
         {
             var chartData = new ChartData(csvPath);
 
-            chartData.GetItems().Should().HaveCount(values.Length);
-            chartData.GetKeys().Should().Equal(keys);
-            chartData.GetValues().Should().Equal(values);
+            chartData.GetOrderedItems().Should().HaveCount(values.Length);
+            chartData.GetOrderedKeys().Should().Equal(keys);
+            chartData.GetOrderedValues().Should().Equal(values);
         }
     }
 }
