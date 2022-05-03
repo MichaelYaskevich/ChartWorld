@@ -60,16 +60,16 @@ namespace ChartWorld.Statistic
             => StatisticProvider.GetExpectation(chartData.GetOrderedValues().ToList());
 
         public static ChartData GetCummax(this IChartData chartData) 
-            => GetCumulative(chartData, StatisticProvider.GetCummax);
+            => GetCumulative(chartData, StatisticProvider.GetCumulativeMax);
         
         public static ChartData GetCummin(this IChartData chartData) 
-            => GetCumulative(chartData, StatisticProvider.GetCummin);
+            => GetCumulative(chartData, StatisticProvider.GetCumulativeMin);
         
         public static ChartData GetCumprod(this IChartData chartData) 
-            => GetCumulative(chartData, StatisticProvider.GetCumprod);
+            => GetCumulative(chartData, StatisticProvider.GetCumulativeProd);
         
         public static ChartData GetCumsum(this IChartData chartData) 
-            => GetCumulative(chartData, StatisticProvider.GetCumsum);
+            => GetCumulative(chartData, StatisticProvider.GetCumulativeSum);
 
         private static ChartData GetCumulative(this IChartData chartData, Func<IEnumerable<double>, IEnumerable<double>> cumFunc) 
             => chartData.CreateChartDataWithValues(

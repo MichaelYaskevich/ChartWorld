@@ -132,35 +132,35 @@ namespace ChartWorld.Tests.Statistic
         }
 
         [Test]
-        public static void GetCummaxTest()
+        public static void GetCumulativeMaxTest()
         {
-            var actual = StatisticProvider.GetCummax(ValuesSample2);
+            var actual = StatisticProvider.GetCumulativeMax(ValuesSample2);
 
             actual.Should().Equal(2.0, 3, 7, 7, 7, 8);
         }
 
         [Test]
-        public static void GetCumminTest()
+        public static void GetCumulativeMinTest()
         {
             var x = new List<double>() {8.0, 4, 1, 7, 3, 2};
 
-            var actual = StatisticProvider.GetCummin(x);
+            var actual = StatisticProvider.GetCumulativeMin(x);
 
             actual.Should().Equal(8.0, 4, 1, 1, 1, 1);
         }
         
         [Test]
-        public static void GetCumprodTest()
+        public static void GetCumulativeProdTest()
         {
-            var actual = StatisticProvider.GetCumprod(ValuesSample2);
+            var actual = StatisticProvider.GetCumulativeProd(ValuesSample2);
 
             actual.Should().Equal(2.0, 6, 42, 42, 168, 1344);
         }
         
         [Test]
-        public static void GetCumsumTest()
+        public static void GetCumulativeSumTest()
         {
-            var actual = StatisticProvider.GetCumsum(ValuesSample2);
+            var actual = StatisticProvider.GetCumulativeSum(ValuesSample2);
 
             actual.Should().Equal(2.0, 5, 12, 13, 17, 25);
         }

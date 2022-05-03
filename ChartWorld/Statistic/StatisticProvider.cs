@@ -156,22 +156,22 @@ namespace ChartWorld.Statistic
             }
         }
 
-        public static IEnumerable<double> GetCummax(IEnumerable<double> x)
+        public static IEnumerable<double> GetCumulativeMax(IEnumerable<double> x)
         {
             return GetCumulative(Math.Max, x, double.MinValue);
         }
 
-        public static IEnumerable<double> GetCummin(IEnumerable<double> x)
+        public static IEnumerable<double> GetCumulativeMin(IEnumerable<double> x)
         {
             return GetCumulative(Math.Min, x, double.MaxValue);
         }
 
-        public static IEnumerable<double> GetCumprod(IEnumerable<double> x)
+        public static IEnumerable<double> GetCumulativeProd(IEnumerable<double> x)
         {
             return GetCumulative((y, z) => y * z, x, 1);
         }
         
-        public static IEnumerable<double> GetCumsum(IEnumerable<double> x)
+        public static IEnumerable<double> GetCumulativeSum(IEnumerable<double> x)
         {
             return GetCumulative((y, z) => y + z, x, 0);
         }
