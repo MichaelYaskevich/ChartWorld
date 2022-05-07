@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using ChartWorld.Statistic;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ChartWorld.Tests.Statistic
+namespace Tests.Statistic
 {
     [TestFixture]
     public static class StatisticProviderTests

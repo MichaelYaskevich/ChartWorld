@@ -7,19 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0-preview-20220401-08" />
         <PackageReference Include="NUnit" Version="3.13.3" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
         <PackageReference Include="coverlet.collector" Version="3.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Tests\Resources\ChartDataWithManyValuesForName.csv" />
-      <EmbeddedResource Include="Tests\Resources\ChartDataWithOneValueForName.csv" />
+      <ProjectReference Include="..\ChartWorld\ChartWorld.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ChartWorld\ChartWorld.csproj" />
+      <EmbeddedResource Include="Resources\ChartDataWithManyValuesForName.csv" />
+      <EmbeddedResource Include="Resources\ChartDataWithOneValueForName.csv" />
     </ItemGroup>
 
 </Project>
