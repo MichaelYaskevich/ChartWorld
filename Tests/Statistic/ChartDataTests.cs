@@ -2,12 +2,12 @@
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ChartWorld.Tests.Statistic
+namespace Tests.Statistic
 {
     [TestFixture]
     public static class ChartDataTests
     {
-        [TestCase("ChartWorld.Tests.Resources.ChartDataWithOneValueForName.csv",
+        [TestCase("ChartWorld.Resources.ChartDataWithOneValueForName.csv",
             new[]
             {
                 "January", "February", "March", "April",
@@ -16,7 +16,7 @@ namespace ChartWorld.Tests.Statistic
             },
             new[] {5.0, 15, 5, 10, 15, 25, 30, 40, 60, 70, 50, 30},
             TestName = "ChartDataWithOneValueForName")]
-        [TestCase("ChartWorld.Tests.Resources.ChartDataWithManyValuesForName.csv",
+        [TestCase("ChartWorld.Resources.ChartDataWithManyValuesForName.csv",
             new[] {"Winter#1", "Winter#2", "Winter#3", 
                 "Spring#1", "Spring#2", "Spring#3", 
                 "Summer#1", "Summer#2", "Summer#3", 
