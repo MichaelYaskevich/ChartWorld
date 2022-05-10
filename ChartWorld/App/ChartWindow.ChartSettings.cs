@@ -12,6 +12,7 @@ namespace ChartWorld.App
     public static class ChartSettings
     {
         private static ComboBox _dropDownList;
+
         public static void InitializeChartTypeSelection(Form form)
         {
             _dropDownList = new ComboBox();
@@ -21,25 +22,24 @@ namespace ChartWorld.App
             _dropDownList.Location = new Point(WindowInfo.Screen.Size.Width - _dropDownList.Size.Width, 0);
             // Связать класс диаграммы с тем методом, которые ее рисует или оставить так?
             _dropDownList.Items.AddRange(GetAllChartNames().Cast<object>().ToArray());
-            _dropDownList.Click += DropDownListClick;
+            _dropDownList.SelectedValueChanged += DropDownListSelectedItemChanged;
             form.Controls.Add(_dropDownList);
         }
-        
-        private static void DropDownListClick(object sender, EventArgs e)
+
+        private static void DropDownListSelectedItemChanged(object sender, EventArgs e)
         {
             var value = _dropDownList.SelectedItem?.ToString()?.Replace(" ", string.Empty);
-            if (value is null)
-                return;
             // Временный костыль
             var chartData = new ChartData("ChartWorld.Tests.Resources.ChartDataWithManyValuesForName.csv");
-            //
+            ////////////////////
             var chart = Activator.CreateInstance(GetChartByName(value), chartData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
-            Painter.PaintChart((IChart)chart);
+            Painter.PaintChart((IChart) chart);
         }
 
-        private static string[] SplitStringByCapitalLetters(string str) {
+        private static string[] SplitStringByCapitalLetters(string str)
+        {
             return Regex.Split(str, @"(?<!^)(?=[A-Z])");
         }
 
@@ -48,7 +48,7 @@ namespace ChartWorld.App
             return AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())
                 .Where(t => t.GetInterfaces().Contains(type));
         }
-        
+
         private static Type GetChartByName(string name)
         {
             return GetImplementations(typeof(IChart)).FirstOrDefault(t => t.Name == name);

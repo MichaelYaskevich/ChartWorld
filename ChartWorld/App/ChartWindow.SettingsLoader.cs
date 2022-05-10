@@ -14,7 +14,7 @@ namespace ChartWorld.App
             SetBackgroundColor(form);
             SetWindowName(form);
         }
-        
+
         private static void SetScreenPosition(Form form)
         {
         }
