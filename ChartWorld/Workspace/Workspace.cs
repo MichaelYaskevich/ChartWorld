@@ -7,8 +7,26 @@ namespace ChartWorld.Workspace
 {
     public class Workspace
     {
-        public Dictionary<IWorkspaceEntity, Point> EntityLocations { get; set; }
+        private List<WorkspaceEntity> WorkspaceEntities { get; } = new();
 
-        public List<IChart> Charts;
+        public Workspace()
+        {
+            // TODO: Retrieve()
+        }
+
+        public void Add(WorkspaceEntity entity)
+        {
+            WorkspaceEntities.Add(entity);
+        }
+
+        public void Save()
+        {
+            // TODO: сохранение текущего состояния воркспейса в БД
+        }
+        
+        public static void Retrieve()
+        {
+            // TODO: достать из БД
+        }
     }
 }
