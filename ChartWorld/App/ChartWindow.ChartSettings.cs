@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
+using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
     public static class ChartSettings
     {
         private static ComboBox _dropDownList;
+        private static Form _form;
+        private static Workspace.Workspace _workspace;
 
-        public static void InitializeChartTypeSelection(Form form)
+        public static void InitializeChartTypeSelection(Form form, Workspace.Workspace workspace)
         {
             _dropDownList = new ComboBox();
+            _form = form;
+            _workspace = workspace;
             _dropDownList.DropDownStyle = ComboBoxStyle.DropDownList;
             _dropDownList.Name = "Choose the stats you want to visualize";
             _dropDownList.Size = new Size(WindowInfo.Screen.Size.Width / 15, WindowInfo.Screen.Size.Height / 15);
@@ -35,6 +42,9 @@ namespace ChartWorld.App
             var chart = Activator.CreateInstance(GetChartByName(value), chartData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
+
+            var entity = WorkspaceEntityFactory.CreateWorkspaceEntity((IChart)chart, _form);
+            _workspace.Add(entity);
             Painter.PaintChart((IChart) chart);
         }
 
