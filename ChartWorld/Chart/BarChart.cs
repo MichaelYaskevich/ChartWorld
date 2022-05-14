@@ -11,16 +11,5 @@ namespace ChartWorld.Chart
         {
             Data = data;
         }
-
-        public IChart BuildChart()
-        {
-            // Что тут будет?
-            return this;
-        }
-
-        public BarChart ChangeBar(string key, double newValue)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

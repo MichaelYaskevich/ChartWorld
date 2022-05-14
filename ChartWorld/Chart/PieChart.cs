@@ -9,26 +9,25 @@ namespace ChartWorld.Chart
     public class PieChart : IChart
     {
         public ChartData Data { get; }
-        public ChartData PercentageData { get; }
-
+        
         public PieChart(ChartData data)
         {
-            Data = data;
-            // Костыль?
-            PercentageData = data;
+            Data = ToPercentageData(data);
         }
 
-        public IChart BuildChart()
+        private ChartData ToPercentageData(ChartData data)
         {
-            var items = Data.GetOrderedItems();
-            var valueTuples = items.ToList();
-            var sum = valueTuples.Select(tuple => tuple.Item2).Sum();
-            foreach (var (key, value) in valueTuples)
+            var orderedItems = data.GetOrderedItems();
+            var valueTuples = orderedItems.ToList();
+            var sum = valueTuples
+                .Select(tuple => tuple.Item2)
+                .Sum();
+            foreach (var (name, value) in valueTuples)
             {
-                PercentageData[key] = value / sum * 100;
+                data[name] = value / sum * 100;
             }
 
-            return this;
+            return data;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Workspace;
@@ -15,20 +16,20 @@ namespace ChartWorld.App
 
         public static void Paint(IWorkspaceEntity entity, Form form)
         {
-            switch (entity)
+            switch (entity.Entity)
             {
                 case BarChart chart:
-                    PaintBarChart(chart.BuildChart(), form);
+                    PaintBarChart(chart, form, entity.Size, entity.Location);
                     break;
                 case PieChart chart:
-                    PaintPieChart(chart.BuildChart(), form);
+                    PaintPieChart(chart, form, entity.Size, entity.Location);
                     break;
                 default:
-                    throw new ArgumentException($"Unexpected chart type: {entity.GetType()}", nameof(entity));
+                    throw new ArgumentException($"Unexpected entity type: {entity.GetType()}", nameof(entity));
             }
         }
 
-        private static void PaintBarChart(BarChart chart, Control form)
+        private static void PaintBarChart(BarChart chart, Control form, Size size, Point location)
         {
             var width = WindowInfo.ScreenSize.Width;
             var height = WindowInfo.ScreenSize.Height;
@@ -47,11 +48,11 @@ namespace ChartWorld.App
             form.Invalidate();
         }
 
-        private static void PaintPieChart(PieChart chart, Control form)
+        private static void PaintPieChart(PieChart chart, Control form, Size size, Point location)
         {
             var width = WindowInfo.ScreenSize.Width;
             var height = WindowInfo.ScreenSize.Height;
-            var data = chart.PercentageData.GetOrderedItems();
+            var data = chart.Data.GetOrderedItems();
             var pen = new Pen(Color.Black);
             pen.Width = 2;
             var circleSize = new Size(height / 2, height / 2);
@@ -73,16 +74,15 @@ namespace ChartWorld.App
                 var asAngle = value / 100 * 360;
                 var currentAngle = angleSum;
                 angleSum += asAngle;
-                // Нужен ли контур?
                 ChartWindow.ToPaint.Enqueue(g =>
                     g.DrawPie(pen, boundingRectangle, (float) currentAngle, (float) asAngle));
-                var color = Color.FromArgb(rnd.Next(5, 250), rnd.Next(5, 250), rnd.Next(5, 250));
+                var color = Color.FromArgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
                 ChartWindow.ToPaint.Enqueue(g => g.FillPie(new SolidBrush(color),
                     boundingRectangle, (float) currentAngle, (float) asAngle));
                 var shift1 = shift;
                 ChartWindow.ToPaint.Enqueue(g => g.DrawRectangle(pen, new Rectangle(WindowInfo.ScreenSize.Width - 300, 50 + shift1, RectangleSize.Width, RectangleSize.Height)));
                 ChartWindow.ToPaint.Enqueue(g => g.FillRectangle(new SolidBrush(color), new Rectangle(WindowInfo.ScreenSize.Width - 300, 50 + shift1, RectangleSize.Width, RectangleSize.Height)));
-                ChartWindow.ToPaint.Enqueue(g => g.DrawString($"{str}: {Math.Round(value, 3)}%", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(color), WindowInfo.ScreenSize.Width - 290 + RectangleSize.Width, 44 + shift1 + RectangleSize.Height / 2));
+                ChartWindow.ToPaint.Enqueue(g => g.DrawString($"{str}:  {Math.Round(value, 3).ToString(CultureInfo.InvariantCulture).Replace(',','.')}%", new Font("Arial", 10, FontStyle.Regular), new SolidBrush(Color.Black), WindowInfo.ScreenSize.Width - 290 + RectangleSize.Width, 44 + shift1 + RectangleSize.Height / 2));
                 shift += 50;
             }
         }

@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using ChartWorld.Chart;
-using ChartWorld.Statistic;
 
 namespace ChartWorld.App
 {
@@ -13,16 +11,15 @@ namespace ChartWorld.App
     {
         public static Queue<Action<Graphics>> ToPaint { get; } = new();
 
-        public ChartWindow()
+        public ChartWindow(Workspace.Workspace workspace)
         {
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);
-            ChartSettings.InitializeChartTypeSelection(this);
+            ChartSettings.InitializeChartTypeSelection(this, workspace);
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        // Как-то криво, не?
         protected override void OnPaint(PaintEventArgs e)
         {
             var graphics = e.Graphics;

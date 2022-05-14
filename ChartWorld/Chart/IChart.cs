@@ -7,7 +7,5 @@ namespace ChartWorld.Chart
     public interface IChart
     {
         public ChartData Data { get; }
-
-        // public IChart BuildChart();
     }
 }

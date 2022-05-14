@@ -22,13 +22,11 @@ namespace ChartWorld.App
         {
             _form = form;
             _dropDownList = new ComboBox();
-            _form = form;
             _workspace = workspace;
             _dropDownList.DropDownStyle = ComboBoxStyle.DropDownList;
             _dropDownList.Name = "Choose the stats you want to visualize";
             _dropDownList.Size = new Size(WindowInfo.ScreenSize.Width / 15, WindowInfo.ScreenSize.Height / 15);
             _dropDownList.Location = new Point(WindowInfo.ScreenSize.Width - _dropDownList.Size.Width, 0);
-            // Связать класс диаграммы с тем методом, которые ее рисует или оставить так?
             _dropDownList.Items.AddRange(GetAllChartNames().Cast<object>().ToArray());
             _dropDownList.SelectedValueChanged += DropDownListSelectedItemChanged;
             form.Controls.Add(_dropDownList);
@@ -38,14 +36,21 @@ namespace ChartWorld.App
         {
             var value = _dropDownList.SelectedItem?.ToString()?.Replace(" ", string.Empty);
             // Временный костыль
+            // Пора фиксить
             var chartData = new ChartData("ChartWorld.Resources.ChartDataWithManyValuesForName.csv");
             ////////////////////
             var chart = Activator.CreateInstance(GetChartByName(value), chartData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
 
-            var entity = WorkspaceEntityFactory.CreateWorkspaceEntity((IChart)chart, _form);
-            _workspace.Add(entity);
+            var chartAsWorkspaceEntity = new WorkspaceEntity(
+                chart,
+                new Size(100, 100),
+                new Point(0, 0),
+                Color.Black,
+                new List<PictureBox>());            
+            _workspace.Add(chartAsWorkspaceEntity);
+            Painter.Paint(chartAsWorkspaceEntity, _form);
         }
 
         private static string[] SplitStringByCapitalLetters(string str)
