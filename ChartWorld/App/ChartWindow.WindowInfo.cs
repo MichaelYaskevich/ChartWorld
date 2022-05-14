@@ -4,6 +4,6 @@ namespace ChartWorld.App
 {
     public static class WindowInfo
     {
-        public static readonly Rectangle Screen = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+        public static readonly Size ScreenSize = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size;
     }
 }

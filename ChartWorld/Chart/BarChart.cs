@@ -12,9 +12,10 @@ namespace ChartWorld.Chart
             Data = data;
         }
 
-        public IChart BuildChart()
+        public BarChart BuildChart()
         {
-            throw new System.NotImplementedException();
+            // Что тут будет?
+            return this;
         }
 
         public BarChart ChangeBar(string key, double newValue)

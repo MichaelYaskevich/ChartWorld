@@ -21,7 +21,7 @@ namespace ChartWorld.App
 
         private static void SetScreenSize(Form form)
         {
-            form.Size = new Size(WindowInfo.Screen.Width, WindowInfo.Screen.Height);
+            form.Size = new Size(WindowInfo.ScreenSize.Width, WindowInfo.ScreenSize.Height);
         }
 
         private static void SetWindowState(Form form)
