@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
@@ -8,28 +9,26 @@ namespace ChartWorld.Chart
     public class PieChart : IChart<PieChart>
     {
         public ChartData Data { get; }
-        private ChartData ModifiedData { get; set; }
+        public ChartData PercentageData { get; }
 
         public PieChart(ChartData data)
         {
             Data = data;
+            // Костыль?
+            PercentageData = data;
         }
 
         public PieChart BuildChart()
         {
-            throw new NotImplementedException();
+            var items = Data.GetOrderedItems();
+            var valueTuples = items.ToList();
+            var sum = valueTuples.Select(tuple => tuple.Item2).Sum();
+            foreach (var (key, value) in valueTuples)
+            {
+                PercentageData[key] = value / sum * 100;
+            }
 
-            // var sum = Data.GetSum();
-            //
-            // foreach (var (key, value) in Data.ChartValues)
-            // {
-            //     if (!ModifiedData.ChartValues.ContainsKey(key))
-            //         ModifiedData.ChartValues.Add(key, value / sum);
-            //     else
-            //         ModifiedData.ChartValues[key] = value / sum;
-            // }
-            //
-            // return this;
+            return this;
         }
     }
 }

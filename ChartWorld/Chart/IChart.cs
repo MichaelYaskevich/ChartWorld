@@ -8,6 +8,6 @@ namespace ChartWorld.Chart
     {
         public ChartData Data { get; }
 
-        public T BuildChart();
+        // public IChart BuildChart();
     }
 }
