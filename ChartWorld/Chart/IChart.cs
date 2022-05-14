@@ -4,10 +4,10 @@ using ChartWorld.Workspace;
 
 namespace ChartWorld.Chart
 {
-    public interface IChart : IWorkspaceEntity
+    public interface IChart<T>
     {
         public ChartData Data { get; }
 
-        public IChart BuildChart();
+        public T BuildChart();
     }
 }
