@@ -6,7 +6,7 @@ using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
-    public class PieChart : IChart<PieChart>
+    public class PieChart : IChart
     {
         public ChartData Data { get; }
         public ChartData PercentageData { get; }
@@ -18,7 +18,7 @@ namespace ChartWorld.Chart
             PercentageData = data;
         }
 
-        public PieChart BuildChart()
+        public IChart BuildChart()
         {
             var items = Data.GetOrderedItems();
             var valueTuples = items.ToList();

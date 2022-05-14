@@ -15,7 +15,8 @@ namespace ChartWorld
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChartWindow());
+            var workspace = new Workspace.Workspace();
+            Application.Run(new ChartWindow(workspace));
         }
     }
 }

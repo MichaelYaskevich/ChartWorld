@@ -3,7 +3,7 @@ using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
-    public class BarChart : IChart<BarChart>
+    public class BarChart : IChart
     {
         public ChartData Data { get; }
 
@@ -12,7 +12,7 @@ namespace ChartWorld.Chart
             Data = data;
         }
 
-        public BarChart BuildChart()
+        public IChart BuildChart()
         {
             // Что тут будет?
             return this;
