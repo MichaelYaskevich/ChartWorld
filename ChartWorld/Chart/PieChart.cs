@@ -7,8 +7,13 @@ namespace ChartWorld.Chart
 {
     public class PieChart : IChart
     {
-        public ChartData Data { get; set; }
+        public ChartData Data { get; }
         private ChartData ModifiedData { get; set; }
+
+        public PieChart(ChartData data)
+        {
+            Data = data;
+        }
 
         public IChart BuildChart()
         {

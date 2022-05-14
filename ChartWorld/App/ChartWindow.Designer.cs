@@ -1,6 +1,6 @@
 ﻿namespace ChartWorld.App
 {
-    partial class ChartWindow
+    sealed partial class ChartWindow
     {
         /// <summary>
         ///  Required designer variable.
