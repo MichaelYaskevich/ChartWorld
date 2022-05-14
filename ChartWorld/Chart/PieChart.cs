@@ -5,7 +5,7 @@ using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
-    public class PieChart : IChart
+    public class PieChart : IChart<PieChart>
     {
         public ChartData Data { get; }
         private ChartData ModifiedData { get; set; }
@@ -15,7 +15,7 @@ namespace ChartWorld.Chart
             Data = data;
         }
 
-        public IChart BuildChart()
+        public PieChart BuildChart()
         {
             throw new NotImplementedException();
 
