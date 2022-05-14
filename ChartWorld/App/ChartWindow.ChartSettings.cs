@@ -12,14 +12,16 @@ namespace ChartWorld.App
     public static class ChartSettings
     {
         private static ComboBox _dropDownList;
+        private static Form _form;
 
         public static void InitializeChartTypeSelection(Form form)
         {
+            _form = form;
             _dropDownList = new ComboBox();
             _dropDownList.DropDownStyle = ComboBoxStyle.DropDownList;
             _dropDownList.Name = "Choose the stats you want to visualize";
-            _dropDownList.Size = new Size(WindowInfo.Screen.Size.Width / 15, WindowInfo.Screen.Size.Height / 15);
-            _dropDownList.Location = new Point(WindowInfo.Screen.Size.Width - _dropDownList.Size.Width, 0);
+            _dropDownList.Size = new Size(WindowInfo.ScreenSize.Width / 15, WindowInfo.ScreenSize.Height / 15);
+            _dropDownList.Location = new Point(WindowInfo.ScreenSize.Width - _dropDownList.Size.Width, 0);
             // Связать класс диаграммы с тем методом, которые ее рисует или оставить так?
             _dropDownList.Items.AddRange(GetAllChartNames().Cast<object>().ToArray());
             _dropDownList.SelectedValueChanged += DropDownListSelectedItemChanged;
@@ -30,12 +32,12 @@ namespace ChartWorld.App
         {
             var value = _dropDownList.SelectedItem?.ToString()?.Replace(" ", string.Empty);
             // Временный костыль
-            var chartData = new ChartData("ChartWorld.Tests.Resources.ChartDataWithManyValuesForName.csv");
+            var chartData = new ChartData("ChartWorld.Resources.ChartDataWithManyValuesForName.csv");
             ////////////////////
             var chart = Activator.CreateInstance(GetChartByName(value), chartData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
-            Painter.PaintChart((IChart) chart);
+            Painter.Paint((IChart) chart, _form);
         }
 
         private static string[] SplitStringByCapitalLetters(string str)

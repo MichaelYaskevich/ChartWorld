@@ -14,15 +14,33 @@ namespace ChartWorld.Statistic
                 TryAdd(key, value);
         }
 
-        public ChartData(string csvPath) : this(CsvParserForChartData.Parse(csvPath)) { }
+        public double this[string key]
+        {
+            get
+            {
+                if (!Dictionary.ContainsKey(key))
+                    throw new KeyNotFoundException("There is no such key in ChartData");
+                return Dictionary[key];
+            }
+            set
+            {
+                if (!Dictionary.ContainsKey(key))
+                    throw new KeyNotFoundException("There is no such key in ChartData");
+                Dictionary[key] = value;
+            }
+        }
 
-        public IEnumerable<(string, double)> GetOrderedItems() 
+        public ChartData(string csvPath) : this(CsvParserForChartData.Parse(csvPath))
+        {
+        }
+
+        public IEnumerable<(string, double)> GetOrderedItems()
             => Keys.Select(key => (key, Dictionary[key]));
 
-        public IEnumerable<string> GetOrderedKeys() 
+        public IEnumerable<string> GetOrderedKeys()
             => Keys;
 
-        public IEnumerable<double> GetOrderedValues() 
+        public IEnumerable<double> GetOrderedValues()
             => Keys.Select(key => Dictionary[key]);
 
         public bool TryGetValue(string key, out double result)

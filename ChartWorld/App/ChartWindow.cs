@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
@@ -9,6 +11,8 @@ namespace ChartWorld.App
 {
     public sealed partial class ChartWindow : Form
     {
+        public static Queue<Action<Graphics>> ToPaint { get; } = new();
+
         public ChartWindow()
         {
             InitializeComponent();
@@ -21,22 +25,13 @@ namespace ChartWorld.App
         // Как-то криво, не?
         protected override void OnPaint(PaintEventArgs e)
         {
-            Painter.Graphics = e.Graphics;
-            var width = WindowInfo.Screen.Size.Width;
-            var height = WindowInfo.Screen.Size.Height;
-            using (var pen = new Pen(Color.Black))
+            var graphics = e.Graphics;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            while (ToPaint.Count > 0)
             {
-                pen.Width = 2;
-                var circleSize = new Size(height / 2, height / 2);
-                var circleCenter = new Point(width / 3 + height / 4, height / 2);
-                var radius = circleSize.Height / 2;
-                e.Graphics.DrawEllipse(pen, new Rectangle(new Point(width / 3, height / 4), circleSize));
-                // Работает
-                e.Graphics.DrawLine(pen, circleCenter,
-                    new Point(circleCenter.X - circleSize.Width / 2, circleCenter.Y));
-                e.Graphics.DrawLine(pen, circleCenter,
-                    new PointF((float) (circleCenter.X + radius * Math.Cos(30 * (Math.PI / 180))),
-                        (float) (circleCenter.Y + radius * Math.Sin(30 * (Math.PI / 180)))));
+                var action = ToPaint.Dequeue();
+                action(graphics);
             }
         }
     }
