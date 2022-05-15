@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ChartWorld.Statistic;
+﻿using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {

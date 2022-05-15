@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ChartWorld.App;
-using ChartWorld.Chart;
 
 namespace ChartWorld.Workspace
 {
     public class Workspace
     {
         private List<WorkspaceEntity> WorkspaceEntities { get; } = new();
-        public WorkspaceEntity ChosenEntity { get; private set; }
+        public WorkspaceEntity ChosenEntity { get; set; }
         public bool WasModified { get; set; } = false;
 
         public IEnumerable<WorkspaceEntity> GetWorkspaceEntities()
@@ -33,6 +31,11 @@ namespace ChartWorld.Workspace
         public Workspace()
         {
             // TODO: Retrieve()
+        }
+
+        public void Clear()
+        {
+            WorkspaceEntities.Clear();
         }
 
         public WorkspaceEntity Add(Control.ControlCollection controls, object entity, Size size, Point location, 

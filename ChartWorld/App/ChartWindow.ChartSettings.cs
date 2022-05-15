@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
-using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
@@ -16,11 +14,67 @@ namespace ChartWorld.App
     {
         private static ComboBox _chartTypeDdl;
         private static ComboBox _chartDataDdl;
-        private static Form _form;
+        private static ChartWindow _form;
         private static Workspace.Workspace _workspace;
         private static ChartData _selectedData;
+        private static PictureBox _openButton;
+        private static PictureBox _clearButton;
 
-        public static void InitializeChartDataSelection(Form form, Workspace.Workspace workspace)
+        public static void InitializeStartButton(ChartWindow form, Workspace.Workspace workspace)
+        {
+            _form = form;
+            _workspace = workspace;
+            InitializeOpenButton();
+            InitializeClearButton();
+        }
+        
+        public static void InitializeOpenButton()
+        {
+            _openButton = new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "OpenButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "open_button.png"),
+                Visible = true,
+                Location = new Point(0, 0),
+                Size = new Size(50, 50)
+            };
+            _openButton.Click += (sender, args) =>
+            {
+                _form.Controls.Remove(_openButton);
+                if (_form.Controls.Contains(_clearButton))
+                    _form.Controls.Remove(_clearButton);
+                InitializeChartDataSelection();
+                InitializeChartTypeSelection();
+                _form.Update();
+            };
+            _form.Controls.Add(_openButton);
+        }
+
+        public static void InitializeClearButton()
+        {
+            _clearButton = new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "ClearButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "clear_button.png"),
+                Visible = true,
+                Location = new Point(60, 0),
+                Size = new Size(50, 50)
+            };
+            _clearButton.Click += (sender, args) =>
+            {
+                _form.Controls.Clear();
+                _form.Controls.Add(_openButton);
+                if (_clearButton != null)
+                    _form.Controls.Add(_clearButton);
+                _workspace.Clear();
+                _form.Invalidate();
+            };
+            _form.Controls.Add(_clearButton);
+        }
+
+        public static void InitializeChartDataSelection()
         {
             _chartDataDdl = new ComboBox();
             _chartDataDdl.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -30,13 +84,13 @@ namespace ChartWorld.App
             _chartDataDdl.Size = new Size(WindowInfo.ScreenSize.Width / 6, WindowInfo.ScreenSize.Height);
             _chartDataDdl.Items.AddRange(fileNames.Select(name => "ChartWorld.Resources." + name).Cast<object>().ToArray());
             _chartDataDdl.SelectedValueChanged += ChartDataDdlSelectedItemChanged;
-            form.Controls.Add(_chartDataDdl);
+            _form.Controls.Add(_chartDataDdl);
         }
 
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
             _selectedData = new ChartData(_chartDataDdl.SelectedItem.ToString());
-            _form.Invalidate();
+            _form.Update();
         }
         
         private static IEnumerable<string> GetAllCsvFileNames()
@@ -53,18 +107,16 @@ namespace ChartWorld.App
                 : resourcesDirectory.GetFiles().Select(file => file.Name);
         }
 
-        public static void InitializeChartTypeSelection(Form form, Workspace.Workspace workspace)
+        public static void InitializeChartTypeSelection()
         {
-            _form = form;
             _chartTypeDdl = new ComboBox();
-            _workspace = workspace;
             _chartTypeDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartTypeDdl.Name = "Choose the way you want your stats to be visualized";
             _chartTypeDdl.Size = new Size(WindowInfo.ScreenSize.Width / 15, WindowInfo.ScreenSize.Height / 15);
             _chartTypeDdl.Location = new Point(WindowInfo.ScreenSize.Width - _chartTypeDdl.Size.Width, 0);
             _chartTypeDdl.Items.AddRange(GetAllChartNames().Cast<object>().ToArray());
             _chartTypeDdl.SelectedValueChanged += ChartTypeDdlSelectedItemChanged;
-            form.Controls.Add(_chartTypeDdl);
+            _form.Controls.Add(_chartTypeDdl);
         }
 
         private static void ChartTypeDdlSelectedItemChanged(object sender, EventArgs e)
@@ -76,9 +128,14 @@ namespace ChartWorld.App
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
           
-            var chartAsWorkspaceEntity = WorkspaceEntityFactory
-                .CreateWorkspaceEntity((IChart)chart, _form, _workspace, _chartTypeDdl);
-            Painter.Paint(chartAsWorkspaceEntity, _form);
+            WorkspaceEntityFactory.CreateWorkspaceEntity(
+                (IChart)chart, _form, _workspace, _chartTypeDdl);
+            _form.Controls.Add(_openButton);
+            if (_clearButton != null)
+                _form.Controls.Add(_clearButton);
+            _form.Controls.Remove(_chartDataDdl);
+            _form.Controls.Remove(_chartTypeDdl);
+            _form.Update();
         }
 
         private static bool IsNullSelectedData()
