@@ -10,15 +10,47 @@ namespace ChartWorld.App
     public sealed partial class ChartWindow : Form
     {
         public static Queue<Action<Graphics>> ToPaint { get; } = new();
+        private static Workspace.Workspace Workspace { get; set; }
 
         public ChartWindow(Workspace.Workspace workspace)
         {
+            Workspace = workspace;
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);
             ChartSettings.InitializeChartTypeSelection(this, workspace);
+            KeyDown += OnKeyDown;
             SetStyle(ControlStyles.ResizeRedraw, true);
+            
+            var drawingTimer = new Timer();
+            drawingTimer.Interval = 30;
+            drawingTimer.Tick += (s,a) => {
+                if (workspace.WasModified)
+                {
+                    Update();
+                    workspace.WasModified = false;
+                }
+            };
+            drawingTimer.Start();
         }
+
+        private void OnKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (Workspace.ChosenEntity != null)
+                ToolsForActions.MakeEntityAction(e.KeyCode, Workspace.ChosenEntity);
+            else
+                ToolsForActions.MakeWorkspaceAction(e.KeyCode, Workspace);
+            
+            Update();
+        }
+
+        public void Update()
+        {
+            Invalidate();
+            foreach (var entity in Workspace.GetWorkspaceEntities())
+                Painter.Paint(entity, this);
+        }
+        
 
         protected override void OnPaint(PaintEventArgs e)
         {
