@@ -42,14 +42,9 @@ namespace ChartWorld.App
             var chart = Activator.CreateInstance(GetChartByName(value), chartData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
-
-            var chartAsWorkspaceEntity = new WorkspaceEntity(
-                chart,
-                new Size(100, 100),
-                new Point(0, 0),
-                Color.Black,
-                new List<PictureBox>());            
-            _workspace.Add(chartAsWorkspaceEntity);
+          
+            var chartAsWorkspaceEntity = WorkspaceEntityFactory
+                .CreateWorkspaceEntity((IChart)chart, _form, _workspace, _dropDownList);
             Painter.Paint(chartAsWorkspaceEntity, _form);
         }
 

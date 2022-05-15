@@ -31,11 +31,15 @@ namespace ChartWorld.App
 
         private static void PaintBarChart(BarChart chart, Control form, Size size, Point location)
         {
-            var width = WindowInfo.ScreenSize.Width;
-            var height = WindowInfo.ScreenSize.Height;
-            var chartBottomRight = new Point(width - width / 20, height - height / 10);
-            var chartTopLeft = new Point(width / 20, height / 20);
-            var chartStart = new Point(width / 20, height - height / 10);
+            // var width = WindowInfo.ScreenSize.Width;
+            // var height = WindowInfo.ScreenSize.Height;
+            var (width, height) = (size.Width, size.Height);
+            // var chartBottomRight = new Point(width - width / 20, height - height / 10);
+            // var chartTopLeft = new Point(width / 20, height / 20);
+            var chartTopLeft = location;
+            var chartBottomRight = new Point(location.X + width, location.Y + height);
+            // var chartStart = new Point(location.X + width / 20, location.Y + height - height / 10);
+            var chartStart = new Point(location.X, location.Y + height);
             var pen = new Pen(Color.Black);
             pen.CustomEndCap = new AdjustableArrowCap(5, 5);
             pen.Width = 2;
@@ -50,13 +54,15 @@ namespace ChartWorld.App
 
         private static void PaintPieChart(PieChart chart, Control form, Size size, Point location)
         {
-            var width = WindowInfo.ScreenSize.Width;
-            var height = WindowInfo.ScreenSize.Height;
+            // var width = WindowInfo.ScreenSize.Width;
+            // var height = WindowInfo.ScreenSize.Height;
+            var (width, height) = (size.Width, size.Height);
             var data = chart.Data.GetOrderedItems();
             var pen = new Pen(Color.Black);
             pen.Width = 2;
             var circleSize = new Size(height / 2, height / 2);
-            var boundingRectangle = new Rectangle(new Point((width - circleSize.Width) / 2, (height - circleSize.Height) / 2), circleSize);
+            // var boundingRectangle = new Rectangle(new Point((width - circleSize.Width) / 2, (height - circleSize.Height) / 2), circleSize);
+            var boundingRectangle = new Rectangle(location, circleSize);
             EnqueuePieDrawing(pen, data, boundingRectangle);
             form.Invalidate();
         }
