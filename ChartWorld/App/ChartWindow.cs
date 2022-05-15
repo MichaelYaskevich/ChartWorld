@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Threading;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace ChartWorld.App
 {
@@ -18,11 +20,15 @@ namespace ChartWorld.App
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);
-            ChartSettings.InitializeChartDataSelection(this, workspace);
-            ChartSettings.InitializeChartTypeSelection(this, workspace);
+            ChartSettings.InitializeStartButton(this, workspace);
             KeyDown += OnKeyDown;
             SetStyle(ControlStyles.ResizeRedraw, true);
-            
+            Click += (sender, args) =>
+            {
+                // Focus();
+                workspace.ChosenEntity = null;
+            };
+
             var drawingTimer = new Timer();
             drawingTimer.Interval = 30;
             drawingTimer.Tick += (s,a) => {

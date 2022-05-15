@@ -90,15 +90,12 @@ namespace ChartWorld.App
 
         private static void PaintPieChart(PieChart chart, Control form, Size size, Point location)
         {
-            // var width = WindowInfo.ScreenSize.Width;
-            // var height = WindowInfo.ScreenSize.Height;
             var (width, height) = (size.Width, size.Height);
             var data = chart.Data.GetOrderedItems();
             var pen = new Pen(Color.Black);
             pen.Width = 2;
             var circleSize = new Size(height / 2, height / 2);
-            var boundingRectangle =
-                new Rectangle(new Point((width - circleSize.Width) / 2, (height - circleSize.Height) / 2), circleSize);
+            var boundingRectangle = new Rectangle(location, circleSize);
             EnqueuePieDrawing(pen, data, boundingRectangle);
             form.Invalidate();
         }
