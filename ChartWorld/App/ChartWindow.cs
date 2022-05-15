@@ -16,6 +16,7 @@ namespace ChartWorld.App
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);
+            ChartSettings.InitializeChartDataSelection(this, workspace);
             ChartSettings.InitializeChartTypeSelection(this, workspace);
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
