@@ -7,7 +7,6 @@ namespace ChartWorld.Workspace
     {
         Size Size { get; }
         Point Location { get; }
-        Color Color { get; }
         object Entity { get; }
     }
 }
