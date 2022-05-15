@@ -29,7 +29,7 @@ namespace ChartWorld.Statistic
         public static bool TryGetStd(this IChartData data, out double std) 
             => StatisticProvider.TryGetStd(data.GetOrderedValues().ToList(), out std);
 
-        public static IChartData Abs(this IChartData data) 
+        public static ChartData Abs(this IChartData data) 
             => new ChartData(data.GetOrderedItems()
                 .Select(item => (item.Item1, Math.Abs(item.Item2))));
 

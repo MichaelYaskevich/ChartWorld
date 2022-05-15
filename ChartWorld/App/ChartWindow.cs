@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -25,7 +24,6 @@ namespace ChartWorld.App
             SetStyle(ControlStyles.ResizeRedraw, true);
             Click += (sender, args) =>
             {
-                // Focus();
                 workspace.ChosenEntity = null;
             };
 
@@ -57,7 +55,6 @@ namespace ChartWorld.App
             foreach (var entity in Workspace.GetWorkspaceEntities())
                 Painter.Paint(entity, this);
         }
-        
 
         protected override void OnPaint(PaintEventArgs e)
         {

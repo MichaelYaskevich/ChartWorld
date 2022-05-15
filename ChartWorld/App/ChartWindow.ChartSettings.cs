@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
-using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
@@ -130,15 +128,14 @@ namespace ChartWorld.App
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
           
-            var chartAsWorkspaceEntity = WorkspaceEntityFactory
-                .CreateWorkspaceEntity((IChart)chart, _form, _workspace, _chartTypeDdl);
+            WorkspaceEntityFactory.CreateWorkspaceEntity(
+                (IChart)chart, _form, _workspace, _chartTypeDdl);
             _form.Controls.Add(_openButton);
             if (_clearButton != null)
                 _form.Controls.Add(_clearButton);
             _form.Controls.Remove(_chartDataDdl);
             _form.Controls.Remove(_chartTypeDdl);
             _form.Update();
-            // Painter.Paint(chartAsWorkspaceEntity, _form);
         }
 
         private static bool IsNullSelectedData()

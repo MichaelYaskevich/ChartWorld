@@ -41,13 +41,9 @@ namespace ChartWorld.App
         private static void PaintBarChart(BarChart chart, Control form, Size size, Point location)
         {
             var rnd = new Random();
-            // var height = WindowInfo.ScreenSize.Height;
             var (width, height) = (size.Width, size.Height);
-            // var chartBottomRight = new Point(width - width / 20, height - height / 10);
-            // var chartTopLeft = new Point(width / 20, height / 20);
             var chartTopLeft = location;
             var chartBottomRight = new Point(location.X + width, location.Y + height);
-            // var chartStart = new Point(location.X + width / 20, location.Y + height - height / 10);
             var chartStart = new Point(location.X, location.Y + height);
             var pen = new Pen(Color.Black);
             pen.CustomEndCap = new AdjustableArrowCap(5, 5);
