@@ -16,4 +16,11 @@
       <None Remove="Tests\Resources\ChartDataWithManyValuesForName.csv" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Resources\ChartDataWithManyValuesForName.csv" />
+      <EmbeddedResource Include="Resources\ChartDataWithManyValuesForName.csv" />
+      <None Remove="Resources\ChartDataWithOneValueForName.csv" />
+      <EmbeddedResource Include="Resources\ChartDataWithOneValueForName.csv" />
+    </ItemGroup>
+
 </Project>

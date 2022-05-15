@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ChartWorld.App;
-using ChartWorld.Chart;
 
 namespace ChartWorld.Workspace
 {
