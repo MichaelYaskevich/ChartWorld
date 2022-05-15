@@ -77,7 +77,7 @@ namespace ChartWorld.App
                 throw new ArgumentNullException(nameof(chart));
           
             var chartAsWorkspaceEntity = WorkspaceEntityFactory
-                .CreateWorkspaceEntity((IChart)chart, _form, _workspace, _dropDownList);
+                .CreateWorkspaceEntity((IChart)chart, _form, _workspace, _chartTypeDdl);
             Painter.Paint(chartAsWorkspaceEntity, _form);
         }
 
