@@ -9,16 +9,27 @@ namespace ChartWorld.Statistic
 {
     public static class CsvParserForChartData
     {
-        public static IEnumerable<(string, double)> Parse(string csvPath)
+        public static (string[], IEnumerable<(string, double)>) Parse(string csvPath)
         {
-            using var csvReader = new StreamReader(GetStream(csvPath));
-            using var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture);
-            
+            using var csvReader = new StreamReader(GetStream(csvPath), leaveOpen: true);
+            using var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture, true);
             csv.Read();
             csv.ReadHeader();
+            var headers = csv.HeaderRecord;
+
+            var result = (headers, ParseFields(csvPath));
+            return result;
+        }
+
+        private static IEnumerable<(string, double)> ParseFields(string csvPath)
+        {
+            using var csvReader = new StreamReader(GetStream(csvPath), leaveOpen: true);
+            using var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture, true);
+            csv.Read();
+            csv.ReadHeader();
+            var columnCount = csv.HeaderRecord.Length;
             while (csv.Read())
             {
-                var columnCount = csv.HeaderRecord.Length;
                 for (var i = 1; i < columnCount; i++)
                 {
                     var keySuffix = columnCount > 2 ? $"#{i}" : "";

@@ -6,10 +6,13 @@ namespace ChartWorld.Statistic
     public class ChartData : IChartData
     {
         private Dictionary<string, double> Dictionary { get; } = new();
+        public string[] Headers { get; }
         private List<string> Keys { get; } = new();
 
-        public ChartData(IEnumerable<(string, double)> items)
+        public ChartData((string[], IEnumerable<(string, double)>) headersWithItems)
         {
+            var (headers, items) = headersWithItems;
+            Headers = headers;
             foreach (var (key, value) in items)
                 TryAdd(key, value);
         }
@@ -66,8 +69,10 @@ namespace ChartWorld.Statistic
 
         public ChartData CreateChartDataWithValues(List<double> values)
         {
-            return new ChartData(values
-                .Select((v, i) => (Keys[i], v)));
+            return new ChartData((
+                Headers, 
+                values.Select((v, i) => (Keys[i], v))
+                ));
         }
     }
 }

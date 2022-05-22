@@ -5,6 +5,7 @@ namespace ChartWorld.Statistic
     public interface IChartData
     {
         IEnumerable<(string, double)> GetOrderedItems();
+        string[] Headers { get; }
         IEnumerable<string> GetOrderedKeys();
         IEnumerable<double> GetOrderedValues();
         bool TryGetValue(string key, out double result);

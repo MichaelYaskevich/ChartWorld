@@ -30,8 +30,11 @@ namespace ChartWorld.Statistic
             => StatisticProvider.TryGetStd(data.GetOrderedValues().ToList(), out std);
 
         public static ChartData Abs(this IChartData data) 
-            => new ChartData(data.GetOrderedItems()
-                .Select(item => (item.Item1, Math.Abs(item.Item2))));
+            => new ChartData((
+                data.Headers, 
+                data.GetOrderedItems()
+                    .Select(item => (item.Item1, Math.Abs(item.Item2)))
+                ));
 
         public static double Autocorrelation(this ChartData chartData, int lag = 1) 
             => StatisticProvider.GetAutocorrelation(chartData.GetOrderedValues().ToList(), lag);
