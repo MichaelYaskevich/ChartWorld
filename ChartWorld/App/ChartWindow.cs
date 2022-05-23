@@ -19,7 +19,7 @@ namespace ChartWorld.App
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);
-            ChartSettings.InitializeStartButton(this, workspace);
+            ChartSettings.InitializeStartButtons(this, workspace);
             KeyDown += OnKeyDown;
             SetStyle(ControlStyles.ResizeRedraw, true);
             Click += (sender, args) =>

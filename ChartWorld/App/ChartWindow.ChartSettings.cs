@@ -18,104 +18,25 @@ namespace ChartWorld.App
         private static ChartWindow _form;
         private static Workspace.Workspace _workspace;
         private static ChartData _selectedData;
-        private static PictureBox _openButton;
-        private static PictureBox _clearButton;
-        private static PictureBox _moveButton;
-        private static PictureBox _resizeButton;
+        private static List<PictureBox> _controlButtons = new();
 
-        public static void InitializeStartButton(ChartWindow form, Workspace.Workspace workspace)
+        public static void InitializeStartButtons(ChartWindow form, Workspace.Workspace workspace)
         {
             _form = form;
             _workspace = workspace;
-            InitializeOpenButton();
-            InitializeClearButton();
-            InitializeMoveButton();
-            InitializeResizeButton();
-        }
-        
-        public static void InitializeOpenButton()
-        {
-            _openButton = new PictureBox()
+            
+            _controlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
+            _controlButtons.Add(ButtonsFactory.CreateMoveButton(workspace));
+            _controlButtons.Add(ButtonsFactory.CreateResizingButton(form, workspace));
+            var initializingActions = new List<Action>()
             {
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Tag = "OpenButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "open_button.png"),
-                Visible = true,
-                Location = new Point(0, 0),
-                Size = new Size(50, 50)
+                InitializeChartDataSelection, 
+                InitializeChartTypeSelection
             };
-            _openButton.Click += (sender, args) =>
-            {
-                _form.Controls.Remove(_openButton);
-                var buttons = new List<PictureBox>() {_clearButton, _moveButton, _resizeButton};
-                foreach (var button in buttons
-                             .Where(button => _form.Controls.Contains(button)))
-                    _form.Controls.Remove(button);
-                
-                InitializeChartDataSelection();
-                InitializeChartTypeSelection();
-                _form.Update();
-            };
-            _form.Controls.Add(_openButton);
-        }
-
-        public static void InitializeClearButton()
-        {
-            _clearButton = new PictureBox()
-            {
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Tag = "ClearButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "clear_button.png"),
-                Visible = true,
-                Location = new Point(60, 0),
-                Size = new Size(50, 50)
-            };
-            _clearButton.Click += (sender, args) =>
-            {
-                _form.Controls.Clear();
-                _form.Controls.Add(_openButton);
-                if (_clearButton != null)
-                    _form.Controls.Add(_clearButton);
-                _workspace.Clear();
-                _form.Invalidate();
-            };
-            _form.Controls.Add(_clearButton);
-        }
-
-        public static void InitializeMoveButton()
-        {
-            _moveButton = new PictureBox()
-            {
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Tag = "MoveButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "move_button.png"),
-                Visible = true,
-                Location = new Point(800, 10),
-                Size = new Size(50, 50)
-            };
-            _moveButton.Click += (sender, args) =>
-            {
-                _workspace.Select(_workspace, SelectionType.Move);
-            };
-            _form.Controls.Add(_moveButton);
-        }
-        
-        public static void InitializeResizeButton()
-        {
-            _resizeButton = new PictureBox()
-            {
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                Tag = "ResizeButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "resizing_button.png"),
-                Visible = true,
-                Location = new Point(860, 10),
-                Size = new Size(50, 50)
-            };
-            _resizeButton.Click += (sender, args) =>
-            {
-                _workspace.Select(_workspace, SelectionType.Resize);
-            };
-            _form.Controls.Add(_resizeButton);
+            _controlButtons.Add(ButtonsFactory.CreateOpenButton(
+                form, _controlButtons, initializingActions));
+            foreach (var button in _controlButtons)
+                form.Controls.Add(button);
         }
 
         public static void InitializeChartDataSelection()
@@ -124,9 +45,13 @@ namespace ChartWorld.App
             _chartDataDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartDataDdl.Name = "Choose the stats you want to visualize";
             _chartDataDdl.Location = new Point(0, 0);
-            var fileNames = GetAllCsvFileNames();
-            _chartDataDdl.Size = new Size(WindowInfo.ScreenSize.Width / 6, WindowInfo.ScreenSize.Height);
-            _chartDataDdl.Items.AddRange(fileNames.Select(name => "ChartWorld.Resources." + name).Cast<object>().ToArray());
+            _chartDataDdl.Size = new Size(
+                WindowInfo.ScreenSize.Width / 6, 
+                WindowInfo.ScreenSize.Height);
+            _chartDataDdl.Items.AddRange(GetAllCsvFileNames()
+                    .Select(name => "ChartWorld.Resources." + name)
+                    .Cast<object>()
+                    .ToArray());
             _chartDataDdl.SelectedValueChanged += ChartDataDdlSelectedItemChanged;
             _form.Controls.Add(_chartDataDdl);
         }
@@ -140,7 +65,8 @@ namespace ChartWorld.App
         private static IEnumerable<string> GetAllCsvFileNames()
         {
             var workingDirectory = Environment.CurrentDirectory;
-            var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent;
+            var projectDirectory = Directory
+                .GetParent(workingDirectory)?.Parent?.Parent;
             if (projectDirectory is null)
                 return Array.Empty<string>();
             var resourcesDirectory = projectDirectory
@@ -148,7 +74,9 @@ namespace ChartWorld.App
                 .FirstOrDefault(d => d.Name == "Resources");
             return resourcesDirectory is null
                 ? Array.Empty<string>()
-                : resourcesDirectory.GetFiles().Select(file => file.Name);
+                : resourcesDirectory
+                    .GetFiles()
+                    .Select(file => file.Name);
         }
 
         public static void InitializeChartTypeSelection()
@@ -156,31 +84,38 @@ namespace ChartWorld.App
             _chartTypeDdl = new ComboBox();
             _chartTypeDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartTypeDdl.Name = "Choose the way you want your stats to be visualized";
-            _chartTypeDdl.Size = new Size(WindowInfo.ScreenSize.Width / 15, WindowInfo.ScreenSize.Height / 15);
-            _chartTypeDdl.Location = new Point(WindowInfo.ScreenSize.Width - _chartTypeDdl.Size.Width, 0);
-            _chartTypeDdl.Items.AddRange(GetAllChartNames().Cast<object>().ToArray());
+            _chartTypeDdl.Size = new Size(
+                WindowInfo.ScreenSize.Width / 15, 
+                WindowInfo.ScreenSize.Height / 15);
+            _chartTypeDdl.Location = new Point(
+                WindowInfo.ScreenSize.Width - _chartTypeDdl.Size.Width, 
+                0);
+            _chartTypeDdl.Items.AddRange(
+                GetAllChartNames().Cast<object>().ToArray());
             _chartTypeDdl.SelectedValueChanged += ChartTypeDdlSelectedItemChanged;
             _form.Controls.Add(_chartTypeDdl);
         }
 
         private static void ChartTypeDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            var value = _chartTypeDdl.SelectedItem?.ToString()?.Replace(" ", string.Empty);
+            var value = _chartTypeDdl.SelectedItem
+                ?.ToString()?.Replace(" ", string.Empty);
             if (IsNullSelectedData())
                 return;
-            var chart = Activator.CreateInstance(GetChartByName(value), _selectedData);
+            var chart = Activator.CreateInstance(
+                GetChartByName(value), _selectedData);
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
           
             WorkspaceEntityFactory.CreateWorkspaceEntity(
                 (IChart)chart, _form, _workspace, _chartTypeDdl);
-            _form.Controls.Add(_openButton);
-            
-            var buttons = new List<PictureBox>() {_clearButton, _moveButton, _resizeButton};
-            foreach (var button in buttons)
+
+            foreach (var button in _controlButtons)
                 _form.Controls.Add(button);
+
             _form.Controls.Remove(_chartDataDdl);
             _form.Controls.Remove(_chartTypeDdl);
+            
             _form.Update();
         }
 
@@ -194,7 +129,9 @@ namespace ChartWorld.App
                 var errorMessage = "Error: Data for chart is not selected";
                 var textSize = g.MeasureString(errorMessage, font);
                 g.DrawString(errorMessage, font,
-                    new SolidBrush(Color.Black), new PointF(_chartTypeDdl.Location.X - textSize.Width - 5, _chartTypeDdl.Location.Y + 4));
+                    new SolidBrush(Color.Black), 
+                    new PointF(_chartTypeDdl.Location.X - textSize.Width - 5, 
+                        _chartTypeDdl.Location.Y + 4));
             });
             _form.Invalidate();
             return true;
@@ -207,13 +144,15 @@ namespace ChartWorld.App
 
         private static IEnumerable<Type> GetImplementations(Type type)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
                 .Where(t => t.GetInterfaces().Contains(type));
         }
 
         private static Type GetChartByName(string name)
         {
-            return GetImplementations(typeof(IChart)).FirstOrDefault(t => t.Name == name);
+            return GetImplementations(typeof(IChart))
+                .FirstOrDefault(t => t.Name == name);
         }
 
         private static string[] GetAllChartNames()
