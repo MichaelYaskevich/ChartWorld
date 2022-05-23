@@ -6,13 +6,10 @@ namespace ChartWorld.Chart
     public class PieChart : IChart
     {
         public ChartData Data { get; }
-
-        public ChartData PercentageData { get; }
-
+        
         public PieChart(ChartData data)
         {
-            Data = data;
-            PercentageData = ToPercentageData(new ChartData(data.GetOrderedItems()));
+            Data = ToPercentageData(data);
         }
 
         private ChartData ToPercentageData(ChartData data)
