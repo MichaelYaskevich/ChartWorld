@@ -24,7 +24,7 @@ namespace ChartWorld.App
             SetStyle(ControlStyles.ResizeRedraw, true);
             Click += (sender, args) =>
             {
-                workspace.ChosenEntity = null;
+                workspace.SelectedEntity = null;
             };
 
             var drawingTimer = new Timer();
@@ -41,8 +41,8 @@ namespace ChartWorld.App
 
         private void OnKeyDown(object? sender, KeyEventArgs e)
         {
-            if (Workspace.ChosenEntity != null)
-                ToolsForActions.MakeEntityAction(e.KeyCode, Workspace.ChosenEntity);
+            if (Workspace.SelectedEntity != null)
+                ToolsForActions.MakeEntityAction(e.KeyCode, Workspace.SelectedEntity, Workspace.SelectionType);
             else
                 ToolsForActions.MakeWorkspaceAction(e.KeyCode, Workspace);
             

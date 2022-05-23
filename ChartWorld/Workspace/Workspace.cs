@@ -8,7 +8,8 @@ namespace ChartWorld.Workspace
     public class Workspace
     {
         private List<WorkspaceEntity> WorkspaceEntities { get; } = new();
-        public WorkspaceEntity ChosenEntity { get; set; }
+        public WorkspaceEntity SelectedEntity { get; set; }
+        public SelectionType SelectionType { get; set; }
         public bool WasModified { get; set; } = false;
 
         public IEnumerable<WorkspaceEntity> GetWorkspaceEntities()
@@ -16,9 +17,10 @@ namespace ChartWorld.Workspace
             return WorkspaceEntities;
         }
 
-        public void Choose(WorkspaceEntity entity)
+        public void Select(WorkspaceEntity entity, SelectionType type)
         {
-            ChosenEntity = entity;
+            SelectedEntity = entity;
+            SelectionType = type;
         }
 
         public void Move(int shiftX, int shiftY)

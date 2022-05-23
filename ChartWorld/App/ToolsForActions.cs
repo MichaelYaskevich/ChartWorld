@@ -5,21 +5,43 @@ namespace ChartWorld.App
 {
     public static class ToolsForActions
     {
-        public static void MakeEntityAction(Keys keyCode, WorkspaceEntity entity)
+        public static void MakeEntityAction(Keys keyCode, WorkspaceEntity entity, SelectionType type)
         {
-            switch (keyCode)
+            switch (type)
             {
-                case Keys.Up:
-                    entity.Move(0, -10);
+                case SelectionType.Move:
+                    switch (keyCode)
+                    {
+                        case Keys.Up:
+                            entity.Move(0, -10);
+                            break;
+                        case Keys.Down:
+                            entity.Move(0, 10);
+                            break;
+                        case Keys.Left:
+                            entity.Move(-10, 0);
+                            break;
+                        case Keys.Right:
+                            entity.Move(10, 0);
+                            break;
+                    }
                     break;
-                case Keys.Down:
-                    entity.Move(0, 10);
-                    break;
-                case Keys.Left:
-                    entity.Move(-10, 0);
-                    break;
-                case Keys.Right:
-                    entity.Move(10, 0);
+                case SelectionType.Resize:
+                    switch (keyCode)
+                    {
+                        case Keys.Up:
+                            entity.Move(0, -10);
+                            break;
+                        case Keys.Down:
+                            entity.Move(0, 10);
+                            break;
+                        case Keys.Left:
+                            entity.Move(-10, 0);
+                            break;
+                        case Keys.Right:
+                            entity.Move(10, 0);
+                            break;
+                    }
                     break;
             }
         }

@@ -33,6 +33,17 @@ namespace ChartWorld.App
                 Visible = true
             };
         }
+        
+        public static PictureBox MakeResizingButton()
+        {
+            return new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "ResizingButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "resizing_button.png"),
+                Visible = true
+            };
+        }
 
         public static IEnumerable<MethodInfo> GetStatisticMethods()
         {
@@ -115,6 +126,7 @@ namespace ChartWorld.App
         {
             var moveButton = MakeMoveButton();
             var statisticButton = MakeStatisticButton();
+            var resizingButton = MakeResizingButton();
             var statisticMethods = GetStatisticMethods()
                 .Where(x => x.GetParameters().Length == 1)
                 .Select(x => x.Name)
@@ -131,7 +143,7 @@ namespace ChartWorld.App
                 location,
                 new List<PictureBox>() {moveButton, statisticButton});
 
-            moveButton.Click += (sender, args) => { workspace.Choose(chartAsWorkspaceEntity); };
+            moveButton.Click += (sender, args) => { workspace.Select(chartAsWorkspaceEntity, SelectionType.Move); };
 
             statisticButton.Click += (o, args) =>
             {
@@ -140,8 +152,8 @@ namespace ChartWorld.App
                 list.SelectedValueChanged += (sender, eventArgs) =>
                 {
                     var chosenMethod = list.SelectedItem?.ToString();
-                    var obj = InvokeStatisticMethod(chosenMethod, chartAsWorkspaceEntity, chartData, form, workspace,
-                        comboBox);
+                    var obj = InvokeStatisticMethod(
+                        chosenMethod, chartAsWorkspaceEntity, chartData, form, workspace, comboBox);
                     DrawAnswer(obj, chartAsWorkspaceEntity);
                     form.Controls.Remove(list);
                     form.Invalidate();
@@ -150,6 +162,10 @@ namespace ChartWorld.App
                         Painter.Paint(entity, form);
                     }
                 };
+            };
+            resizingButton.Click += (sender, args) =>
+            {
+                workspace.Select(chartAsWorkspaceEntity, SelectionType.Resize);
             };
         }
     }
