@@ -12,6 +12,7 @@ namespace ChartWorld
         [STAThread]
         public static void Main()
         {
+            //TODO: добавить DI-container 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

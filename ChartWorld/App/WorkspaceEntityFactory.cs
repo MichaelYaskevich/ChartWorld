@@ -17,7 +17,7 @@ namespace ChartWorld.App
             {
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Tag = "MoveButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "move_cursor.png"),
+                Image = new Bitmap(HelpMethods.PathToImages + "move_button.png"),
                 Visible = true
             };
             return button;
@@ -141,7 +141,7 @@ namespace ChartWorld.App
                 chart,
                 new Size(500, 500),
                 location,
-                new List<PictureBox>() {moveButton, statisticButton});
+                new List<PictureBox>() {moveButton, statisticButton, resizingButton});
 
             moveButton.Click += (sender, args) => { workspace.Select(chartAsWorkspaceEntity, SelectionType.Move); };
 

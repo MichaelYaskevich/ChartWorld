@@ -42,9 +42,8 @@ namespace ChartWorld.App
         private void OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (Workspace.SelectedEntity != null)
-                ToolsForActions.MakeEntityAction(e.KeyCode, Workspace.SelectedEntity, Workspace.SelectionType);
-            else
-                ToolsForActions.MakeWorkspaceAction(e.KeyCode, Workspace);
+                ToolsForActions.MakeEntityAction(
+                    e.KeyCode, Workspace.SelectedEntity, Workspace.SelectionType);
             
             Update();
         }
