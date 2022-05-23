@@ -28,10 +28,10 @@ namespace ChartWorld.App
             switch (entity.Entity)
             {
                 case BarChart chart:
-                    PaintBarChart(chart, form, entity.GetSize(), entity.Location);
+                    PaintBarChart(chart, form, entity.Size, entity.Location);
                     break;
                 case PieChart chart:
-                    PaintPieChart(chart, form, entity.GetSize(), entity.Location);
+                    PaintPieChart(chart, form, entity.Size, entity.Location);
                     break;
                 default:
                     throw new ArgumentException($"Unexpected entity type: {entity.GetType()}", nameof(entity));

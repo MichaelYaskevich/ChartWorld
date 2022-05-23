@@ -38,11 +38,11 @@ namespace ChartWorld.Workspace
             WorkspaceEntities.Clear();
         }
 
-        public WorkspaceEntity Add(Control.ControlCollection controls, object entity, double sizeMultiplier, Point location, 
+        public WorkspaceEntity Add(Control.ControlCollection controls, object entity, Size size, Point location, 
             List<PictureBox> interactionButtons = null)
         {
             var buttons = InitialiseButtons(controls, interactionButtons, location);
-            var workspaceEntity = new WorkspaceEntity(entity, sizeMultiplier, location, buttons);
+            var workspaceEntity = new WorkspaceEntity(entity, size, location, buttons);
             WorkspaceEntities.Add(workspaceEntity);
             buttons[0].Click += (sender, args) =>
             {

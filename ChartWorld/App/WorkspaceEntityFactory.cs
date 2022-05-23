@@ -85,7 +85,7 @@ namespace ChartWorld.App
         {
             var chart = new BarChart(data);
             CreateWorkspaceEntity(chart, form, workspace, comboBox,
-                new Point(entity.Location.X + entity.GetSize().Width + 50, entity.Location.Y));
+                new Point(entity.Location.X + entity.Size.Width + 50, entity.Location.Y));
             form.Update();
         }
 
@@ -96,7 +96,7 @@ namespace ChartWorld.App
                     obj.ToString(),
                     new Font("Arial", 8, FontStyle.Regular),
                     new SolidBrush(Color.Black),
-                    entity.Location.X + entity.GetSize().Width + 10,
+                    entity.Location.X + entity.Size.Width + 10,
                     entity.Location.Y));
         }
 
@@ -127,7 +127,7 @@ namespace ChartWorld.App
             var chartAsWorkspaceEntity = workspace.Add(
                 form.Controls,
                 chart,
-                0.4,
+                new Size(500, 500),
                 location,
                 new List<PictureBox>() {moveButton, statisticButton});
 
