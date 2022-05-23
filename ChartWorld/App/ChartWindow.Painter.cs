@@ -53,7 +53,9 @@ namespace ChartWorld.App
             var height = size.Height;
             var widthRatio = width / (double) WindowInfo.ScreenSize.Width;
             var heightRatio = height / (double) WindowInfo.ScreenSize.Height;
-            var chartStart = new Point(location.X, location.Y + height);
+            var chartBottomRight = new Point(width - width / 20, height - height / 10);
+            var chartTopLeft = new Point(width / 20, height / 20);
+            var chartStart = new Point(width / 20, height - height / 10);
             var items = chart.Data.GetOrderedItems().ToList();
             var chartSize = new Size(chartBottomRight.X - chartStart.X, chartStart.Y - chartTopLeft.Y);
             var barWidth = chartSize.Width / items.Count / 3;
