@@ -5,7 +5,20 @@ namespace ChartWorld.App
 {
     public static class ToolsForActions
     {
-        public static void MakeEntityAction(Keys keyCode, WorkspaceEntity entity)
+        public static void MakeEntityAction(Keys keyCode, ICanMakeAction entity, SelectionType type)
+        {
+            switch (type)
+            {
+                case SelectionType.Move:
+                    MakeMoveAction(keyCode, entity);
+                    break;
+                case SelectionType.Resize:
+                    MakeResizeAction(keyCode, entity);
+                    break;
+            }
+        }
+
+        private static void MakeMoveAction(Keys keyCode, ICanMakeAction entity)
         {
             switch (keyCode)
             {
@@ -21,24 +34,21 @@ namespace ChartWorld.App
                 case Keys.Right:
                     entity.Move(10, 0);
                     break;
+                default:
+                    //TODO: показывать информацию о том какие кнопки нажать
+                    break;
             }
         }
 
-        public static void MakeWorkspaceAction(Keys keyCode, Workspace.Workspace workspace)
+        private static void MakeResizeAction(Keys keyCode, ICanMakeAction entity)
         {
             switch (keyCode)
             {
                 case Keys.Up:
-                    workspace.Move(0, -10);
+                    entity.TryResize(1.1);
                     break;
                 case Keys.Down:
-                    workspace.Move(0, 10);
-                    break;
-                case Keys.Left:
-                    workspace.Move(-10, 0);
-                    break;
-                case Keys.Right:
-                    workspace.Move(10, 0);
+                    entity.TryResize(0.90909);
                     break;
             }
         }

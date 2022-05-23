@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
+using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
@@ -19,6 +20,8 @@ namespace ChartWorld.App
         private static ChartData _selectedData;
         private static PictureBox _openButton;
         private static PictureBox _clearButton;
+        private static PictureBox _moveButton;
+        private static PictureBox _resizeButton;
 
         public static void InitializeStartButton(ChartWindow form, Workspace.Workspace workspace)
         {
@@ -26,6 +29,8 @@ namespace ChartWorld.App
             _workspace = workspace;
             InitializeOpenButton();
             InitializeClearButton();
+            InitializeMoveButton();
+            InitializeResizeButton();
         }
         
         public static void InitializeOpenButton()
@@ -42,8 +47,11 @@ namespace ChartWorld.App
             _openButton.Click += (sender, args) =>
             {
                 _form.Controls.Remove(_openButton);
-                if (_form.Controls.Contains(_clearButton))
-                    _form.Controls.Remove(_clearButton);
+                var buttons = new List<PictureBox>() {_clearButton, _moveButton, _resizeButton};
+                foreach (var button in buttons
+                             .Where(button => _form.Controls.Contains(button)))
+                    _form.Controls.Remove(button);
+                
                 InitializeChartDataSelection();
                 InitializeChartTypeSelection();
                 _form.Update();
@@ -72,6 +80,42 @@ namespace ChartWorld.App
                 _form.Invalidate();
             };
             _form.Controls.Add(_clearButton);
+        }
+
+        public static void InitializeMoveButton()
+        {
+            _moveButton = new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "MoveButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "move_button.png"),
+                Visible = true,
+                Location = new Point(800, 10),
+                Size = new Size(50, 50)
+            };
+            _moveButton.Click += (sender, args) =>
+            {
+                _workspace.Select(_workspace, SelectionType.Move);
+            };
+            _form.Controls.Add(_moveButton);
+        }
+        
+        public static void InitializeResizeButton()
+        {
+            _resizeButton = new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "ResizeButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "resizing_button.png"),
+                Visible = true,
+                Location = new Point(860, 10),
+                Size = new Size(50, 50)
+            };
+            _resizeButton.Click += (sender, args) =>
+            {
+                _workspace.Select(_workspace, SelectionType.Resize);
+            };
+            _form.Controls.Add(_resizeButton);
         }
 
         public static void InitializeChartDataSelection()
@@ -131,8 +175,10 @@ namespace ChartWorld.App
             WorkspaceEntityFactory.CreateWorkspaceEntity(
                 (IChart)chart, _form, _workspace, _chartTypeDdl);
             _form.Controls.Add(_openButton);
-            if (_clearButton != null)
-                _form.Controls.Add(_clearButton);
+            
+            var buttons = new List<PictureBox>() {_clearButton, _moveButton, _resizeButton};
+            foreach (var button in buttons)
+                _form.Controls.Add(button);
             _form.Controls.Remove(_chartDataDdl);
             _form.Controls.Remove(_chartTypeDdl);
             _form.Update();

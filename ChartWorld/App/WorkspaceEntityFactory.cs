@@ -17,7 +17,7 @@ namespace ChartWorld.App
             {
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Tag = "MoveButton",
-                Image = new Bitmap(HelpMethods.PathToImages + "move_cursor.png"),
+                Image = new Bitmap(HelpMethods.PathToImages + "move_button.png"),
                 Visible = true
             };
             return button;
@@ -30,6 +30,17 @@ namespace ChartWorld.App
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Tag = "StatisticButton",
                 Image = new Bitmap(HelpMethods.PathToImages + "statistic_button.png"),
+                Visible = true
+            };
+        }
+        
+        public static PictureBox MakeResizingButton()
+        {
+            return new PictureBox()
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "ResizingButton",
+                Image = new Bitmap(HelpMethods.PathToImages + "resizing_button.png"),
                 Visible = true
             };
         }
@@ -115,6 +126,7 @@ namespace ChartWorld.App
         {
             var moveButton = MakeMoveButton();
             var statisticButton = MakeStatisticButton();
+            var resizingButton = MakeResizingButton();
             var statisticMethods = GetStatisticMethods()
                 .Where(x => x.GetParameters().Length == 1)
                 .Select(x => x.Name)
@@ -129,9 +141,9 @@ namespace ChartWorld.App
                 chart,
                 new Size(500, 500),
                 location,
-                new List<PictureBox>() {moveButton, statisticButton});
+                new List<PictureBox>() {moveButton, statisticButton, resizingButton});
 
-            moveButton.Click += (sender, args) => { workspace.Choose(chartAsWorkspaceEntity); };
+            moveButton.Click += (sender, args) => { workspace.Select(chartAsWorkspaceEntity, SelectionType.Move); };
 
             statisticButton.Click += (o, args) =>
             {
@@ -140,8 +152,8 @@ namespace ChartWorld.App
                 list.SelectedValueChanged += (sender, eventArgs) =>
                 {
                     var chosenMethod = list.SelectedItem?.ToString();
-                    var obj = InvokeStatisticMethod(chosenMethod, chartAsWorkspaceEntity, chartData, form, workspace,
-                        comboBox);
+                    var obj = InvokeStatisticMethod(
+                        chosenMethod, chartAsWorkspaceEntity, chartData, form, workspace, comboBox);
                     DrawAnswer(obj, chartAsWorkspaceEntity);
                     form.Controls.Remove(list);
                     form.Invalidate();
@@ -150,6 +162,10 @@ namespace ChartWorld.App
                         Painter.Paint(entity, form);
                     }
                 };
+            };
+            resizingButton.Click += (sender, args) =>
+            {
+                workspace.Select(chartAsWorkspaceEntity, SelectionType.Resize);
             };
         }
     }

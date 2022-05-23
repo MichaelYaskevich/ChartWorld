@@ -1,24 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using ChartWorld.App;
 
 namespace ChartWorld.Workspace
 {
-    public class Workspace
+    public class Workspace: ICanMakeAction
     {
         private List<WorkspaceEntity> WorkspaceEntities { get; } = new();
-        public WorkspaceEntity ChosenEntity { get; set; }
+        public ICanMakeAction SelectedEntity { get; set; }
+        public SelectionType SelectionType { get; set; }
         public bool WasModified { get; set; } = false;
+        
+        public Workspace()
+        {
+            // TODO: Retrieve()
+        }
 
         public IEnumerable<WorkspaceEntity> GetWorkspaceEntities()
         {
             return WorkspaceEntities;
         }
 
-        public void Choose(WorkspaceEntity entity)
+        public void Select(ICanMakeAction entity, SelectionType type)
         {
-            ChosenEntity = entity;
+            SelectedEntity = entity;
+            SelectionType = type;
         }
 
         public void Move(int shiftX, int shiftY)
@@ -27,10 +36,16 @@ namespace ChartWorld.Workspace
                 entity.Move(shiftX, shiftY);
             WasModified = true;
         }
-
-        public Workspace()
+        
+        public bool TryResize(double factor)
         {
-            // TODO: Retrieve()
+            foreach (var entity in WorkspaceEntities)
+                if (!entity.CanResize(factor))
+                    return false;
+            foreach (var entity in WorkspaceEntities)
+                entity.TryResize(factor);
+            WasModified = true;
+            return true;
         }
 
         public void Clear()
