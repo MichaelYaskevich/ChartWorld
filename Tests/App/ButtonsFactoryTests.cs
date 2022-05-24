@@ -14,7 +14,7 @@ namespace Tests.App
     public class ButtonsFactoryTests
     {
         private static ChartWindow Form { get; set; }
-        private static Workspace Workspace { get; set; }
+        private static ChartWorld.Workspace.Workspace Workspace { get; set; }
         private static List<PictureBox> Buttons { get; set; }
         
         [SetUp]
@@ -32,9 +32,9 @@ namespace Tests.App
                 new List<Action>() {() => log += "1", () => log += "2"}));
         }
 
-        public static void RefreshResources()
+        private static void RefreshResources()
         {
-            Workspace = new Workspace();
+            Workspace = new ChartWorld.Workspace.Workspace();
             Form = new ChartWindow(Workspace);
             Form.Controls.Clear();
         }

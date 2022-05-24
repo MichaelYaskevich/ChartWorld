@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
-using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
@@ -52,7 +51,7 @@ namespace ChartWorld.App
                 WindowInfo.ScreenSize.Width / 6, 
                 WindowInfo.ScreenSize.Height);
             _chartDataDdl.Items.AddRange(GetAllCsvFileNames()
-                    .Select(name => "ChartWorld.Resources." + name)
+                    .Select(name => name)
                     .Cast<object>()
                     .ToArray());
             _chartDataDdl.SelectedValueChanged += ChartDataDdlSelectedItemChanged;
@@ -61,7 +60,7 @@ namespace ChartWorld.App
 
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            _selectedData = new ChartData(_chartDataDdl.SelectedItem.ToString());
+            _selectedData = new ChartData("ChartWorld.Resources." + _chartDataDdl.SelectedItem);
             _form.Update();
         }
         
