@@ -22,4 +22,8 @@
       <EmbeddedResource Include="Resources\ChartDataWithOneValueForName.csv" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Resources\Images" />
+    </ItemGroup>
+
 </Project>

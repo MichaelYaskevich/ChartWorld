@@ -7,7 +7,8 @@ namespace ChartWorld.App
         public static string PathToImages = GetGameDirectoryRoot().FullName + "\\Resources\\Images\\";
         public static DirectoryInfo GetGameDirectoryRoot() {
             var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (!dir.ToString().EndsWith("ChartWorld")) {
+            while (!dir.ToString().EndsWith("ChartWorld") 
+                   && !dir.ToString().EndsWith("Tests")) {
                 dir = dir.Parent;
             }
             return dir;
