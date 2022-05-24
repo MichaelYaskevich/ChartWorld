@@ -78,7 +78,7 @@ namespace ChartWorld.Workspace
             
             foreach (var button in result)
             {
-                button.Location = new Point(location.X - 40, location.Y + 35 * buttonsCount);
+                button.Location = new Point(location.X - 40, location.Y + 35 * (buttonsCount-1));
                 button.Size = new Size(30, 30);
                 controls.Add(button);
                 buttonsCount++;

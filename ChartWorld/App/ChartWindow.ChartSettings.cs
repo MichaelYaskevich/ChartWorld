@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ChartWorld.Chart;
 using ChartWorld.Statistic;
-using ChartWorld.Workspace;
 
 namespace ChartWorld.App
 {
@@ -24,10 +23,13 @@ namespace ChartWorld.App
         {
             _form = form;
             _workspace = workspace;
-            
+
+            var screenMiddle = WindowInfo.ScreenSize.Width / 2;
             _controlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
-            _controlButtons.Add(ButtonsFactory.CreateMoveButton(workspace));
-            _controlButtons.Add(ButtonsFactory.CreateResizingButton(form, workspace));
+            _controlButtons.Add(ButtonsFactory.CreateMoveButton(
+                workspace, new Point(screenMiddle - 55, 10)));
+            _controlButtons.Add(ButtonsFactory.CreateResizingButton(
+                workspace, new Point(screenMiddle + 5, 10)));
             var initializingActions = new List<Action>()
             {
                 InitializeChartDataSelection, 
@@ -49,7 +51,7 @@ namespace ChartWorld.App
                 WindowInfo.ScreenSize.Width / 6, 
                 WindowInfo.ScreenSize.Height);
             _chartDataDdl.Items.AddRange(GetAllCsvFileNames()
-                    .Select(name => "ChartWorld.Resources." + name)
+                    .Select(name => name)
                     .Cast<object>()
                     .ToArray());
             _chartDataDdl.SelectedValueChanged += ChartDataDdlSelectedItemChanged;
@@ -58,7 +60,7 @@ namespace ChartWorld.App
 
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            _selectedData = new ChartData(_chartDataDdl.SelectedItem.ToString());
+            _selectedData = new ChartData("ChartWorld.Resources." + _chartDataDdl.SelectedItem);
             _form.Update();
         }
         

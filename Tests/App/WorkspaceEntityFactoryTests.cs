@@ -11,7 +11,7 @@ namespace Tests.App
     public class WorkspaceEntityFactoryTests
     {
         [Test]
-        public static void Test()
+        public static void GetStatisticMethodsTest()
         {
             var allMethodsExpected = new List<string>()
             {
