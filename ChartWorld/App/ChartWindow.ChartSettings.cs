@@ -24,10 +24,13 @@ namespace ChartWorld.App
         {
             _form = form;
             _workspace = workspace;
-            
+
+            var screenMiddle = WindowInfo.ScreenSize.Width / 2;
             _controlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
-            _controlButtons.Add(ButtonsFactory.CreateMoveButton(workspace));
-            _controlButtons.Add(ButtonsFactory.CreateResizingButton(form, workspace));
+            _controlButtons.Add(ButtonsFactory.CreateMoveButton(
+                workspace, new Point(screenMiddle - 55, 10)));
+            _controlButtons.Add(ButtonsFactory.CreateResizingButton(
+                workspace, new Point(screenMiddle + 5, 10)));
             var initializingActions = new List<Action>()
             {
                 InitializeChartDataSelection, 

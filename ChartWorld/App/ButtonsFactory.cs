@@ -59,20 +59,20 @@ namespace ChartWorld.App
             form.Invalidate();
         }
 
-        public static PictureBox CreateMoveButton(Workspace.Workspace workspace)
+        public static PictureBox CreateMoveButton(Workspace.Workspace workspace, Point location)
         {
             var moveButton = GetSimplePictureBox(
-                "MoveButton", "move_button.png", new Point(800, 10));
+                "MoveButton", "move_button.png", location);
             moveButton.Click += (_, _) => 
                 workspace.Select(workspace, SelectionType.Move);
 
             return moveButton;
         }
         
-        public static PictureBox CreateResizingButton(ChartWindow form, Workspace.Workspace workspace)
+        public static PictureBox CreateResizingButton(Workspace.Workspace workspace, Point location)
         {
             var resizeButton = GetSimplePictureBox(
-                "ResizeButton", "resizing_button.png", new Point(860, 10));
+                "ResizeButton", "resizing_button.png", location);
             resizeButton.Click += (_, _) => 
                 workspace.Select(workspace, SelectionType.Resize);
 
