@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using ChartWorld.Statistic;
-using ChartWorld.Workspace;
+﻿using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
-    public interface IChart : IWorkspaceEntity
+    public interface IChart
     {
-        public ChartData Data { get; set; }
-
-        public IChart BuildChart();
+        public ChartData Data { get; }
     }
 }

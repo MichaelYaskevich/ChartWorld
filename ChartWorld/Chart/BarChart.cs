@@ -1,20 +1,14 @@
-﻿using System.Collections.Generic;
-using ChartWorld.Statistic;
+﻿using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
     public class BarChart : IChart
     {
-        public ChartData Data { get; set; }
+        public ChartData Data { get; }
 
-        public IChart BuildChart()
+        public BarChart(ChartData data)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public BarChart ChangeBar(string key, double newValue)
-        {
-            throw new System.NotImplementedException();
+            Data = data;
         }
     }
 }

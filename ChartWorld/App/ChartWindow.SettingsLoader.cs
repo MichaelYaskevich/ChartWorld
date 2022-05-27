@@ -3,23 +3,39 @@ using System.Windows.Forms;
 
 namespace ChartWorld.App
 {
-    partial class ChartWindow
+    public static class SettingsLoader
     {
-        private readonly Rectangle _screen = Screen.PrimaryScreen.WorkingArea;
-
-        private void SetScreenPosition()
+        public static void LoadDefaultSettings(Form form)
         {
-            //Location = new Point((screen.Width - w) / 2, (screen.Height - h) / 2);
+            SetScreenPosition(form);
+            SetScreenSize(form);
+            SetWindowState(form);
+            SetBackgroundColor(form);
+            SetWindowName(form);
         }
 
-        private void SetScreenSize()
+        private static void SetScreenPosition(Form form)
         {
-            Size = new Size(_screen.Width, _screen.Height);
         }
 
-        private void SetWindowState()
+        private static void SetScreenSize(Form form)
         {
-            WindowState = FormWindowState.Maximized;
+            form.Size = new Size(WindowInfo.ScreenSize.Width, WindowInfo.ScreenSize.Height);
+        }
+
+        private static void SetWindowState(Form form)
+        {
+            form.WindowState = FormWindowState.Maximized;
+        }
+
+        private static void SetBackgroundColor(Form form)
+        {
+            form.BackColor = Color.WhiteSmoke;
+        }
+
+        private static void SetWindowName(Form form)
+        {
+            form.Text = "ChartWorld";
         }
     }
 }

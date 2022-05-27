@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "86CUHb1kH/SzaNSd6iqCQdofXVEXkUITmS6XfaHw84baaQwHTgzJJB+puqgBGvrWXQ2BTxlsWs5QX18Y8rbHqQ==",
+  "dgSpecHash": "TixmmeiWWiFaghmL7ab9V/R3/0dFhZ/lw00howM19Mx7W34b4g044BArSbbKp50ouBXiXuYE8Ocy4CGdr//4Cg==",
   "success": true,
   "projectFilePath": "D:\\The_p\\prog\\c#\\ChartWorld\\ChartWorld\\ChartWorld.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\The_p\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Users\\The_p\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
-    "C:\\Users\\The_p\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512"
+    "C:\\Users\\The_p\\.nuget\\packages\\csvhelper\\27.2.1\\csvhelper.27.2.1.nupkg.sha512",
+    "C:\\Users\\The_p\\.nuget\\packages\\fluentassertions\\6.6.0\\fluentassertions.6.6.0.nupkg.sha512",
+    "C:\\Users\\The_p\\.nuget\\packages\\system.configuration.configurationmanager\\4.4.0\\system.configuration.configurationmanager.4.4.0.nupkg.sha512",
+    "C:\\Users\\The_p\\.nuget\\packages\\system.security.cryptography.protecteddata\\4.4.0\\system.security.cryptography.protecteddata.4.4.0.nupkg.sha512"
   ],
   "logs": []
 }

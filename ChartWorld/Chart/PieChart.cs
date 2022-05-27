@@ -1,30 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Linq;
 using ChartWorld.Statistic;
 
 namespace ChartWorld.Chart
 {
     public class PieChart : IChart
     {
-        public ChartData Data { get; set; }
-        private ChartData ModifiedData { get; set; }
+        public ChartData Data { get; }
+        public ChartData PercentageData { get; }
 
-        public IChart BuildChart()
+        public PieChart(ChartData data)
         {
-            throw new NotImplementedException();
+            Data = data;
+            PercentageData = new ChartData((data.Headers, data.GetOrderedItems()));
+        }
 
-            // var sum = Data.GetSum();
-            //
-            // foreach (var (key, value) in Data.ChartValues)
-            // {
-            //     if (!ModifiedData.ChartValues.ContainsKey(key))
-            //         ModifiedData.ChartValues.Add(key, value / sum);
-            //     else
-            //         ModifiedData.ChartValues[key] = value / sum;
-            // }
-            //
-            // return this;
+        private ChartData ToPercentageData(ChartData data)
+        {
+            var orderedItems = data.GetOrderedItems();
+            var valueTuples = orderedItems.ToList();
+            var sum = valueTuples
+                .Select(tuple => tuple.Item2)
+                .Sum();
+            foreach (var (name, value) in valueTuples)
+            {
+                data[name] = value / sum * 100;
+            }
+
+            return data;
         }
     }
 }

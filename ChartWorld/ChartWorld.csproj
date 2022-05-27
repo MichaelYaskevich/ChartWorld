@@ -7,7 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NUnit" Version="3.13.3" />
+      <PackageReference Include="CsvHelper" Version="27.2.1" />
+      <PackageReference Include="FluentAssertions" Version="6.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Tests\Resources\ChartDataWithOneValueForName.csv" />
+      <None Remove="Tests\Resources\ChartDataWithManyValuesForName.csv" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\ChartDataWithManyValuesForName.csv" />
+      <EmbeddedResource Include="Resources\ChartDataWithManyValuesForName.csv" />
+      <None Remove="Resources\ChartDataWithOneValueForName.csv" />
+      <EmbeddedResource Include="Resources\ChartDataWithOneValueForName.csv" />
     </ItemGroup>
 
 </Project>
