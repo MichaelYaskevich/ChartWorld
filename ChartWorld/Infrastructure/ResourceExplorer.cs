@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ChartWorld.Infrastructure
 {
-    public class ResourceExplorer
+    public static class ResourceExplorer
     {
         public static readonly string PathToProject = GetRootDirectory().FullName;
         public static readonly string PathToResources = PathToProject + "\\Infrastructure\\Resources\\";

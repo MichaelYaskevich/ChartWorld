@@ -34,7 +34,7 @@ namespace ChartWorld.UI
             _form = form;
             _workspace = workspace;
 
-            var screenMiddle = WindowInfo.ScreenSize.Width / 2;
+            var screenMiddle = Painter.ScreenSize.Width / 2;
             ControlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
             ControlButtons.Add(ButtonsFactory.CreateMoveButton(
                 workspace, new Point(screenMiddle - 55, 10)));
@@ -44,7 +44,7 @@ namespace ChartWorld.UI
             {
                 InitializeChartDataSelection,
                 InitializeChartTypeSelection,
-                InitializeChartDataSelectionFromDrive
+                // InitializeChartDataSelectionFromDrive
             };
             ControlButtons.Add(ButtonsFactory.CreateOpenButton(
                 form, ControlButtons, initializingActions));
@@ -52,36 +52,39 @@ namespace ChartWorld.UI
                 form.Controls.Add(button);
         }
 
-        private static void InitializeChartDataSelectionFromDrive()
-        {
-            var chartDataSelectionButton = new Button();
-            chartDataSelectionButton.Text = $"Select .csv from drive";
-            chartDataSelectionButton.Location = new Point(_chartDataDdl.Location.X,
-                _chartDataDdl.Location.Y + _chartDataDdl.Size.Height);
-            chartDataSelectionButton.Size = _chartDataDdl.Size;
-            chartDataSelectionButton.Click += ChartDataSelectionFromDriveButtonOnClick;
-            _form.Controls.Add(chartDataSelectionButton);
-        }
+        // private static void InitializeChartDataSelectionFromDrive()
+        // {
+        //     var chartDataSelectionButton = new Button();
+        //     chartDataSelectionButton.Text = $"Select .csv from drive";
+        //     chartDataSelectionButton.Location = new Point(_chartDataDdl.Location.X,
+        //         _chartDataDdl.Location.Y + _chartDataDdl.Size.Height);
+        //     chartDataSelectionButton.Size = _chartDataDdl.Size;
+        //     chartDataSelectionButton.Click += ChartDataSelectionFromDriveButtonOnClick;
+        //     _form.Controls.Add(chartDataSelectionButton);
+        // }
         
-        private static void ChartDataSelectionFromDriveButtonOnClick(object sender, EventArgs e)
-        {
-            var size = -1;
-            var openFileDialog = new OpenFileDialog();
-            var result = openFileDialog.ShowDialog(); // Show the dialog.
-            if (result == DialogResult.OK) // Test result.
-            {
-                var file = openFileDialog.FileName;
-                try
-                {
-                    var text = File.ReadAllText(file);
-                    size = text.Length;
-                }
-                catch (IOException)
-                {
-                    
-                }
-            }
-        }
+        // private static void ChartDataSelectionFromDriveButtonOnClick(object sender, EventArgs e)
+        // {
+        //     var openFileDialog = new OpenFileDialog();
+        //     var result = openFileDialog.ShowDialog(); // Show the dialog.
+        //     if (result != DialogResult.OK) 
+        //         return;
+        //     
+        //     var path = openFileDialog.FileName;
+        //
+        //     _selectedData = new ChartData(path + _chartDataDdl.SelectedItem);
+        //
+        //     if (_selectedChartType is not null)
+        //     {
+        //         var chart = (IChart) Activator.CreateInstance(
+        //             GetSelectedChartType(), _selectedData);
+        //         WorkspaceEntityFactory.CreateWorkspaceEntity(chart, _form, _workspace, _chartTypeDdl);
+        //         var entity = _workspace.Add(_form.Controls, chart, new Size(500, 500), new Point(100, 100));
+        //         Painter.Paint(entity, _form);
+        //     }
+        //
+        //     _form.Update();
+        // }
 
         private static void InitializeChartDataSelection()
         {
@@ -90,8 +93,8 @@ namespace ChartWorld.UI
             _chartDataDdl.Text = "Choose the stats you want to visualize";
             _chartDataDdl.Location = new Point(0, 0);
             _chartDataDdl.Size = new Size(
-                WindowInfo.ScreenSize.Width / 6,
-                WindowInfo.ScreenSize.Height);
+                Painter.ScreenSize.Width / 6,
+                Painter.ScreenSize.Height);
             _chartDataDdl.Items.AddRange(ResourceExplorer.GetAllCsvFileNames()
                 .Select(name => name)
                 .Cast<object>()
@@ -102,12 +105,7 @@ namespace ChartWorld.UI
 
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            var formattedPathToResources = "ChartWorld" + ResourceExplorer
-                .PathToResources[ResourceExplorer.PathToProject.Length..]
-                .Replace('\\', '.')
-                .Replace('/', '.');
-
-            _selectedData = new ChartData(formattedPathToResources + _chartDataDdl.SelectedItem);
+            _selectedData = new ChartData(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
 
             if (_selectedChartType is not null)
             {
@@ -127,10 +125,10 @@ namespace ChartWorld.UI
             _chartTypeDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartTypeDdl.Text = "Choose the type of chart";
             _chartTypeDdl.Size = new Size(
-                WindowInfo.ScreenSize.Width / 15,
-                WindowInfo.ScreenSize.Height / 15);
+                Painter.ScreenSize.Width / 15,
+                Painter.ScreenSize.Height / 15);
             _chartTypeDdl.Location = new Point(
-                WindowInfo.ScreenSize.Width - _chartTypeDdl.Size.Width,
+                Painter.ScreenSize.Width - _chartTypeDdl.Size.Width,
                 0);
             _chartTypeDdl.Items.AddRange(
                 HelpMethods.GetAllInterfaceImplementationsNames(typeof(IChart)).Cast<object>().ToArray());
