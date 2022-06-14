@@ -20,7 +20,7 @@ namespace Tests.Workspace
         public static void RefreshResources()
         {
             Workspace = new ChartWorld.Domain.Workspace.Workspace();
-            Form = new ChartWindow(Workspace);
+            Form = new ChartWindow(Workspace, null);
             Form.Controls.Clear();
         }
 
@@ -87,7 +87,7 @@ namespace Tests.Workspace
         public static void ClearTest()
         {
             var workspace = new ChartWorld.Domain.Workspace.Workspace();
-            var form = new ChartWindow(workspace);
+            var form = new ChartWindow(workspace, null);
             workspace.Add(form.Controls, "entity1", Size.Empty, Point.Empty);
             workspace.Add(form.Controls, "entity2", Size.Empty, Point.Empty);
 

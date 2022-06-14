@@ -50,13 +50,65 @@ namespace ChartWorld.UI
             return resizeButton;
         }
 
-        public static PictureBox GetSimpleButton(string tag, string name, Point location)
+        public static PictureBox CreateIncorrectFileButton(Point location)
+        {
+            var button = GetSimpleButton(
+                "IncorrectFile", "incorrect_file.png", location);
+            button.Size = new Size(200, 100);
+            return button;
+        }
+
+        public static PictureBox CreateOkButton(Point location)
+        {
+            var button = GetSimpleButton("Ok", "ok.png", location);
+            button.Size = new Size(200, 50);
+            return button;
+        }
+        
+        public static PictureBox CreateMoveButton()
+        {
+            var button = new PictureBox
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "MoveButton",
+                Image = new Bitmap(ResourceExplorer.PathToImages + "move_button.png"),
+                Visible = true,
+                BackColor = Color.Transparent
+            };
+            return button;
+        }
+
+        public static PictureBox CreateStatisticButton()
+        {
+            return new PictureBox
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "StatisticButton",
+                Image = new Bitmap(ResourceExplorer.PathToImages + "statistic_button.png"),
+                Visible = true,
+                BackColor = Color.Transparent
+            };
+        }
+
+        public static PictureBox CreateResizingButton()
+        {
+            return new PictureBox
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "ResizingButton",
+                Image = new Bitmap(ResourceExplorer.PathToImages + "resizing_button.png"),
+                Visible = true,
+                BackColor = Color.Transparent
+            };
+        }
+
+        public static PictureBox GetSimpleButton(string tag, string imageName, Point location)
         {
             return new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Tag = tag,
-                Image = new Bitmap(ResourceExplorer.PathToImages + name),
+                Image = new Bitmap(ResourceExplorer.PathToImages + imageName),
                 Location = location,
                 Size = new Size(50, 50),
                 BackColor = Color.Transparent

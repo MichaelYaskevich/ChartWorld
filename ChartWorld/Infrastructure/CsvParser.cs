@@ -17,7 +17,7 @@ namespace ChartWorld.Infrastructure
             csv.Read();
             csv.ReadHeader();
             var headers = csv.HeaderRecord;
-
+            
             var result = (headers, ParseFields(csvPath));
             return result;
         }
@@ -35,16 +35,9 @@ namespace ChartWorld.Infrastructure
                 {
                     var keySuffix = columnCount > 2 ? $"#{i}" : "";
                     yield return ($"{csv.GetField(csv.HeaderRecord[0])}{keySuffix}",
-                        Convert.ToDouble(csv.GetField(csv.HeaderRecord[i])));
+                        Convert.ToDouble(csv.GetField(csv.HeaderRecord[i])));//CsvHelper.MissingFieldException
                 }
             }
         }
-
-        // private static Stream GetStream(string path)
-        // {
-        //     return Assembly
-        //         .GetExecutingAssembly()
-        //         .GetManifestResourceStream(path);
-        // }
     }
 }

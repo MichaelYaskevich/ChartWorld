@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using ChartWorld;
 using ChartWorld.App;
 using ChartWorld.Domain.Workspace;
+using ChartWorld.UI;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -12,37 +14,20 @@ namespace Tests.App
     public class WorkspaceEntityFactoryTests
     {
         [Test]
-        public static void GetStatisticMethodsTest()
+        public static void GetAvailableCommandNameTest()
         {
-            var allMethodsExpected = new List<string>()
+            var allNamesExpected = new List<string>()
             {
-                "GetItemsWithMaxValue", "GetItemsWithMinValue", "GetItemsWithSameValue", "TryGetMedian", "TryGetMean",
-                "TryGetStd", "Abs", "Autocorrelation", "Clip", "TryClip", "GetExpectation", "GetCumulativeMax",
-                "GetCumulativeMin",
-                "GetCumulativeProd", "GetCumulativeSum"
+                "Абсолютные значения", "Кумулятивный максимум", "Кумулятивный минимум",
+                "Кумулятивное произведение","Кумулятивная сумма", "Математическое ожидание",
+                "Элементы с максимальным значением", "Элементы с минимальным значением"
             };
+            var executor = Program.CreateExecutor();
+            
+            var allNamesActual = executor.GetAvailableCommandNames();
 
-            var withoutParametersExpected = new List<string>()
-            {
-                "GetItemsWithMaxValue", "GetItemsWithMinValue", "Abs", "GetExpectation",
-                "GetCumulativeMax", "GetCumulativeMin", "GetCumulativeProd", "GetCumulativeSum"
-            };
-
-            var allMethodsActual = WorkspaceEntityFactory
-                .GetStatisticMethods()
-                .Select(x => x.Name)
-                .ToArray();
-            var withoutParametersActual = WorkspaceEntityFactory
-                .GetStatisticMethods()
-                .Where(x => x.GetParameters().Length == 1)
-                .Select(x => x.Name)
-                .ToArray();
-
-            allMethodsActual.Should().NotBeEmpty();
-            allMethodsActual.Should().Equal(allMethodsExpected);
-
-            withoutParametersActual.Should().NotBeEmpty();
-            withoutParametersActual.Should().Equal(withoutParametersExpected);
+            allNamesActual.Should().NotBeEmpty();
+            allNamesActual.Should().Equal(allNamesExpected);
         }
     }
 }
