@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using ChartWorld.Statistic;
+using ChartWorld.Domain.Chart.ChartData;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -16,7 +16,7 @@ namespace Tests.Statistic
         public static void SetUp()
         {
             ChartData = new ChartData((
-                new []{"first", "second"},
+                new[] {"first", "second"},
                 new List<(string, double)>
                 {
                     ("a", -1.0),

@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
-using ChartWorld.App;
+using ChartWorld.Domain.Workspace;
+using ChartWorld.UI;
 
 namespace ChartWorld
 {
@@ -16,7 +17,7 @@ namespace ChartWorld
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var workspace = new Workspace.Workspace();
+            var workspace = new Workspace();
             Application.Run(new ChartWindow(workspace));
         }
     }

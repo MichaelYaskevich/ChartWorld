@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using ChartWorld.Workspace;
+using ChartWorld.Domain.Workspace;
 
 namespace ChartWorld.App
 {

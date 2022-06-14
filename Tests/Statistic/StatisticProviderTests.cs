@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ChartWorld.Statistic;
+using ChartWorld.Domain.Statistic;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -147,7 +147,7 @@ namespace Tests.Statistic
 
             actual.Should().Equal(8.0, 4, 1, 1, 1, 1);
         }
-        
+
         [Test]
         public static void GetCumulativeProdTest()
         {
@@ -155,7 +155,7 @@ namespace Tests.Statistic
 
             actual.Should().Equal(2.0, 6, 42, 42, 168, 1344);
         }
-        
+
         [Test]
         public static void GetCumulativeSumTest()
         {
