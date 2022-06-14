@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ChartWorld.App;
-using ChartWorld.Workspace;
+using ChartWorld.UI;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -14,9 +14,9 @@ namespace Tests.App
     public class ButtonsFactoryTests
     {
         private static ChartWindow Form { get; set; }
-        private static ChartWorld.Workspace.Workspace Workspace { get; set; }
+        private static ChartWorld.Domain.Workspace.Workspace Workspace { get; set; }
         private static List<PictureBox> Buttons { get; set; }
-        
+
         [SetUp]
         public static void SetUp()
         {
@@ -28,33 +28,33 @@ namespace Tests.App
                 ButtonsFactory.CreateResizingButton(Workspace, Point.Empty)
             };
             var log = "";
-            Buttons.Add(ButtonsFactory.CreateOpenButton(Form, Buttons, 
+            Buttons.Add(ButtonsFactory.CreateOpenButton(Form, Buttons,
                 new List<Action>() {() => log += "1", () => log += "2"}));
         }
 
         private static void RefreshResources()
         {
-            Workspace = new ChartWorld.Workspace.Workspace();
+            Workspace = new ChartWorld.Domain.Workspace.Workspace();
             Form = new ChartWindow(Workspace);
             Form.Controls.Clear();
         }
-        
+
         [Test]
         public static void OpenButtonTest()
         {
             foreach (var button in Buttons)
                 Form.Controls.Add(button);
-            
+
             var log = "";
-            ButtonsActions.OpenAction(Form, Buttons, 
+            ButtonsActions.OpenAction(Form, Buttons,
                 new List<Action>() {() => log += "1", () => log += "2"});
 
             Form.Controls.Count.Should().Be(0);
             log.Should().Be("12");
-            
+
             RefreshResources();
         }
-        
+
         [Test]
         public static void ClearButtonTest()
         {
@@ -62,17 +62,17 @@ namespace Tests.App
                 Form.Controls.Add(button);
 
             Workspace.Add(Form.Controls, "entity", Size.Empty, Point.Empty);
-            
+
             var clearButton = Buttons.First(x => (string) x.Tag == "ClearButton");
             ButtonsActions.ClearAction(clearButton, Form, Workspace);
-        
+
             Form.Controls.Count.Should().Be(2);
             Form.Controls[0].Should().Be(clearButton);
             Form.Controls[1].Should().BeOfType(typeof(PictureBox));
             (Form.Controls[1] as PictureBox)!.Tag.Should().Be("OpenButton");
 
             Workspace.GetWorkspaceEntities().Should().HaveCount(0);
-            
+
             RefreshResources();
         }
 
@@ -86,7 +86,7 @@ namespace Tests.App
             button.Location.Should().Be(Point.Empty);
             button.Size.Should().Be(new Size(50, 50));
         }
-        
+
         [Test]
         public static void SimpleButtonWithWrongNameTest()
         {

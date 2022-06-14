@@ -3,7 +3,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ChartWorld.App;
-using ChartWorld.Workspace;
+using ChartWorld.Domain.Workspace;
+using ChartWorld.UI;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -12,16 +13,17 @@ namespace Tests.Workspace
     [TestFixture]
     public static class WorkspaceTests
     {
-        private static ChartWorld.Workspace.Workspace Workspace { get; set; }
+        private static ChartWorld.Domain.Workspace.Workspace Workspace { get; set; }
         private static ChartWindow Form { get; set; }
+
         [SetUp]
         public static void RefreshResources()
         {
-            Workspace = new ChartWorld.Workspace.Workspace();
+            Workspace = new ChartWorld.Domain.Workspace.Workspace();
             Form = new ChartWindow(Workspace);
             Form.Controls.Clear();
         }
-        
+
         [Test]
         public static void AddTest()
         {
@@ -32,7 +34,7 @@ namespace Tests.Workspace
             emptyButton.Location.Should().Be(new Point(-40, 35));
             emptyButton.Size.Should().Be(new Size(30, 30));
             Form.Controls.Count.Should().Be(2);
-            
+
             var closeButton = Form.Controls[0];
             closeButton.Location.Should().Be(new Point(-40, 0));
             closeButton.Size.Should().Be(new Size(30, 30));
@@ -42,7 +44,7 @@ namespace Tests.Workspace
 
             entities.Should().HaveCount(1);
             entities.Should().Contain(entity);
-            
+
             RefreshResources();
         }
 
@@ -58,22 +60,21 @@ namespace Tests.Workspace
                 Workspace.SelectedEntity.Should().Be(entity);
                 Workspace.SelectionType.Should().Be(type);
             }
-            
+
             RefreshResources();
         }
-        
+
         [Test]
         public static void MoveTest()
         {
-            
             var entity1 = Workspace.Add(Form.Controls, "entity1", Size.Empty, Point.Empty);
             var entity2 = Workspace.Add(Form.Controls, "entity2", Size.Empty, Point.Empty);
-            
+
             Workspace.Move(1, 0);
 
             entity1.Location.Should().Be(new Point(1, 0));
             entity2.Location.Should().Be(new Point(1, 0));
-            
+
             Workspace.Move(0, -1);
 
             entity1.Location.Should().Be(new Point(1, -1));
@@ -81,22 +82,22 @@ namespace Tests.Workspace
 
             RefreshResources();
         }
-        
+
         [Test]
         public static void ClearTest()
         {
-            var workspace = new ChartWorld.Workspace.Workspace();
+            var workspace = new ChartWorld.Domain.Workspace.Workspace();
             var form = new ChartWindow(workspace);
             workspace.Add(form.Controls, "entity1", Size.Empty, Point.Empty);
             workspace.Add(form.Controls, "entity2", Size.Empty, Point.Empty);
-            
+
             workspace.Clear();
 
             workspace.GetWorkspaceEntities().Should().BeEmpty();
 
             RefreshResources();
         }
-        
+
         [Test]
         public static void ResizeTest()
         {
@@ -108,7 +109,7 @@ namespace Tests.Workspace
             smallEntity.Size.Should().Be(new Size(400, 400));
 
             Workspace.TryResize(2).Should().BeFalse();
-            Workspace.TryResize(1.0/5).Should().BeFalse();
+            Workspace.TryResize(1.0 / 5).Should().BeFalse();
 
             RefreshResources();
         }
