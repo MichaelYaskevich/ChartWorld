@@ -13,6 +13,7 @@ namespace Tests.App
     [TestFixture]
     public class ButtonsFactoryTests
     {
+        //TODO: починить все тесты
         private static ChartWindow Form { get; set; }
         private static ChartWorld.Domain.Workspace.Workspace Workspace { get; set; }
         private static List<PictureBox> Buttons { get; set; }
@@ -35,7 +36,7 @@ namespace Tests.App
         private static void RefreshResources()
         {
             Workspace = new ChartWorld.Domain.Workspace.Workspace();
-            Form = new ChartWindow(Workspace);
+            Form = new ChartWindow(Workspace, null);
             Form.Controls.Clear();
         }
 

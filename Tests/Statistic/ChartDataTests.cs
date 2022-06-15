@@ -28,7 +28,7 @@ namespace Tests.Statistic
             TestName = "ChartDataWithManyValuesForName")]
         public static void ChartDataCtorParseCsvRight(string csvPath, string[] keys, double[] values)
         {
-            var chartData = new ChartData(csvPath);
+            var chartData = ChartData.Create(csvPath);
 
             chartData.GetOrderedItems().Should().HaveCount(values.Length);
             chartData.GetOrderedKeys().Should().Equal(keys);

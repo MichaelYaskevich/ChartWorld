@@ -14,7 +14,7 @@ namespace ChartWorld.UI
 {
     public static class ChartSettings
     {
-        private static readonly List<PictureBox> ControlButtons = new();
+        private static readonly List<PictureBox> HomeControlButtons = new();
 
         private static readonly StringFormat Sf = new()
         {
@@ -35,10 +35,10 @@ namespace ChartWorld.UI
             _workspace = workspace;
 
             var screenMiddle = Painter.ScreenSize.Width / 2;
-            ControlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
-            ControlButtons.Add(ButtonsFactory.CreateMoveButton(
+            HomeControlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
+            HomeControlButtons.Add(ButtonsFactory.CreateMoveButton(
                 workspace, new Point(screenMiddle - 55, 10)));
-            ControlButtons.Add(ButtonsFactory.CreateResizingButton(
+            HomeControlButtons.Add(ButtonsFactory.CreateResizingButton(
                 workspace, new Point(screenMiddle + 5, 10)));
             var initializingActions = new List<Action>
             {
@@ -46,9 +46,9 @@ namespace ChartWorld.UI
                 InitializeChartTypeSelection,
                 // InitializeChartDataSelectionFromDrive
             };
-            ControlButtons.Add(ButtonsFactory.CreateOpenButton(
-                form, ControlButtons, initializingActions));
-            foreach (var button in ControlButtons)
+            HomeControlButtons.Add(ButtonsFactory.CreateOpenButton(
+                form, HomeControlButtons, initializingActions));
+            foreach (var button in HomeControlButtons)
                 form.Controls.Add(button);
         }
 
@@ -103,11 +103,32 @@ namespace ChartWorld.UI
             _form.Controls.Add(_chartDataDdl);
         }
 
+        private static void GoHome()
+        {
+            _form.Controls.Clear();
+            foreach (var button in HomeControlButtons)
+                _form.Controls.Add(button);
+        }
+
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            _selectedData = new ChartData(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
+            _selectedData = ChartData.Create(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
 
-            if (_selectedChartType is not null)
+            if (_selectedData == null)
+            {
+                var location = new Point(Painter.ScreenSize.Width / 2, 10);
+                var incorrectFileButton = ButtonsFactory.CreateIncorrectFileButton(location);
+                location.X -= incorrectFileButton.Size.Width / 2;
+                incorrectFileButton.Location = location;
+                var okButton = ButtonsFactory.CreateOkButton(
+                    new Point(location.X, location.Y + incorrectFileButton.Size.Height + 10));
+                
+                _form.Controls.Add(incorrectFileButton);
+                _form.Controls.Add(okButton);
+
+                okButton.Click += (_, _) => { GoHome(); };
+            }
+            else if (_selectedChartType is not null)
             {
                 var chart = (IChart) Activator.CreateInstance(
                     GetSelectedChartType(), _selectedData);
@@ -148,7 +169,7 @@ namespace ChartWorld.UI
 
             WorkspaceEntityFactory.CreateWorkspaceEntity(chart, _form, _workspace, _chartTypeDdl);
 
-            foreach (var button in ControlButtons)
+            foreach (var button in HomeControlButtons)
                 _form.Controls.Add(button);
             _form.Controls.Remove(_chartDataDdl);
             _form.Controls.Remove(_chartTypeDdl);

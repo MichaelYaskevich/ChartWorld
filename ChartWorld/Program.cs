@@ -1,7 +1,10 @@
 using System;
 using System.Windows.Forms;
+using ChartWorld.Domain.Statistic;
+using ChartWorld.Domain.Statistic.Commands;
 using ChartWorld.Domain.Workspace;
 using ChartWorld.UI;
+using Ninject;
 
 namespace ChartWorld
 {
@@ -18,7 +21,25 @@ namespace ChartWorld
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var workspace = new Workspace();
-            Application.Run(new ChartWindow(workspace));
+            ICommandsExecutor executor = CreateExecutor();
+            Application.Run(new ChartWindow(workspace, executor));
+        }
+
+        public static ICommandsExecutor CreateExecutor()
+        {
+            var container = new StandardKernel();
+            
+            container.Bind<StatisticCommand>().To<AbsCommand>();
+            container.Bind<StatisticCommand>().To<CumulativeMaxCommand>();
+            container.Bind<StatisticCommand>().To<CumulativeMinCommand>();
+            container.Bind<StatisticCommand>().To<CumulativeProdCommand>();
+            container.Bind<StatisticCommand>().To<CumulativeSumCommand>();
+            container.Bind<StatisticCommand>().To<ExpectationCommand>();
+            container.Bind<StatisticCommand>().To<ItemsWithMaxValueCommand>();
+            container.Bind<StatisticCommand>().To<ItemsWithMinValueCommand>();
+
+            container.Bind<ICommandsExecutor>().To<CommandsExecutor>();
+            return container.Get<ICommandsExecutor>();
         }
     }
 }

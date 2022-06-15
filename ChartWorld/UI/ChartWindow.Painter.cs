@@ -41,11 +41,23 @@ namespace ChartWorld.UI
                 case PieChart chart:
                     PaintPieChart(chart, entity.Size, entity.Location);
                     break;
+                case string text:
+                    PaintString(text, entity.Size, entity.Location);
+                    break;
                 default:
                     throw new ArgumentException($"Unexpected entity type: {entity.GetType()}", nameof(entity));
             }
 
             form.Invalidate();
+        }
+
+        private static void PaintString(string text, Size size, Point location)
+        {
+            ChartWindow.ToPaint.Enqueue(g =>
+            {
+                g.DrawString(text, DefaultFontForLetters, BlackSolidBrush,
+                    location.X + 80, location.Y + 10, StringFormat);
+            });
         }
 
         private static void PaintBarChart(BarChart chart, Size size, Point location)

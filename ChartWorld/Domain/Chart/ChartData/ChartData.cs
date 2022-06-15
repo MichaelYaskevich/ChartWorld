@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using ChartWorld.Infrastructure;
 
 namespace ChartWorld.Domain.Chart.ChartData
@@ -34,8 +35,17 @@ namespace ChartWorld.Domain.Chart.ChartData
             }
         }
 
-        public ChartData(string csvPath) : this(CsvParser.Parse(csvPath))
+        public static ChartData Create(string csvPath)
         {
+            try
+            {
+                var data = CsvParser.Parse(csvPath);
+                return new ChartData(data);
+            }
+            catch (CsvHelper.CsvHelperException _)
+            {
+                return null;
+            }
         }
 
         public IEnumerable<(string, double)> GetOrderedItems()
