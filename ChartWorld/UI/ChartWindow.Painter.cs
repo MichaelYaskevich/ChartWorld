@@ -27,6 +27,13 @@ namespace ChartWorld.UI
             Alignment = StringAlignment.Center
         };
 
+        private static readonly StringFormat VerticalFormat = new()
+        {
+            LineAlignment = StringAlignment.Center,
+            Alignment = StringAlignment.Center,
+            FormatFlags = StringFormatFlags.DirectionVertical
+        };
+
         private static Color[] _pieColors;
         private static Color[] _barColors;
         private const int BarChartMarkCount = 6;
@@ -40,9 +47,7 @@ namespace ChartWorld.UI
                     break;
                 case PieChart chart:
                     PaintPieChart(chart, entity.Size, entity.Location);
-                    break;
-                default:
-                    throw new ArgumentException($"Unexpected entity type: {entity.GetType()}", nameof(entity));
+                    break; 
             }
 
             form.Invalidate();
@@ -62,48 +67,51 @@ namespace ChartWorld.UI
             var barWidth = chartSize.Width / items.Count / 3;
             var max = items.Max(x => x.Item2);
             var fontSizeMultiplier = chartSize.Width / (float) fullscreenChartSize.Width;
-            EnqueueAxisDrawing(chart.Data.Headers, size.Width / 100, chartSize.Height / BarChartMarkCount,
-                (int) max / BarChartMarkCount,
+            EnqueueAxisDrawing(chart.Data.Headers, size.Width / 100, (float) chartSize.Height / BarChartMarkCount,
+                (float) max / BarChartMarkCount,
                 chartStartPoint, chartBottomRight, chartTopLeft, fontSizeMultiplier);
             EnqueueBarsDrawing(items, SetColors(items.Count, ref _barColors), chartStartPoint.X + chartSize.Width / 20,
                 max,
                 barWidth, chartStartPoint, chartSize, fontSizeMultiplier);
         }
 
-        private static void EnqueueAxisDrawing(string[] headers, int markWidth, int markShift, int markShiftValue,
-            Point chartStart, Point chartBottomRight, Point chartTopLeft, float fontSizeMultiplier)
+        private static void EnqueueAxisDrawing(string[] headers, int markWidth, float markShift, float markShiftValue,
+            Point chartStartPoint, Point chartBottomRight, Point chartTopLeft, float fontSizeMultiplier)
         {
-            var font = new Font("Arial", DefaultFontForNumbers.Size * fontSizeMultiplier * 2);
-            ChartWindow.ToPaint.Enqueue(g => g.DrawLine(DefaultPen, chartStart, chartBottomRight));
-            ChartWindow.ToPaint.Enqueue(g => g.DrawLine(DefaultPen, chartStart, chartTopLeft));
+            var letterFont = new Font("Arial", DefaultFontForNumbers.Size * fontSizeMultiplier * 2);
+            var headerFont = new Font("Arial", DefaultFontForNumbers.Size * fontSizeMultiplier * 3,
+                FontStyle.Bold);
+            ChartWindow.ToPaint.Enqueue(g => g.DrawLine(DefaultPen, chartStartPoint, chartBottomRight));
+            ChartWindow.ToPaint.Enqueue(g => g.DrawLine(DefaultPen, chartStartPoint, chartTopLeft));
+            ChartWindow.ToPaint.Enqueue(g => g.DrawLine(DefaultPen, chartBottomRight, new Point(chartBottomRight.X, chartTopLeft.Y)));
             ChartWindow.ToPaint.Enqueue(g =>
             {
                 var horizontalHeader = headers[0];
-                var textSize = g.MeasureString(horizontalHeader, font);
-                g.DrawString(horizontalHeader, font,
+                var textSize = g.MeasureString(horizontalHeader, headerFont);
+                g.DrawString(horizontalHeader, headerFont,
                     Brushes.Black,
                     new Point(chartBottomRight.X - (int) textSize.Width,
                         chartBottomRight.Y + (int) textSize.Height / 2));
             });
             var markValue = markShiftValue;
-            for (var i = 1; i < BarChartMarkCount; i++)
+            for (var i = 1; i < BarChartMarkCount + 1; i++)
             {
                 var iValue = i;
-                var valAsStr = markValue.ToString(CultureInfo.InvariantCulture);
+                var valAsStr = ((int)markValue).ToString(CultureInfo.InvariantCulture);
                 ChartWindow.ToPaint.Enqueue(g =>
                 {
-                    var textSize = g.MeasureString(valAsStr, font);
-                    var yLocation = chartStart.Y - markShift * iValue;
-                    g.DrawString(valAsStr, font, BlackSolidBrush,
-                        new PointF(chartStart.X - markWidth - textSize.Width / 2, yLocation),
+                    var textSize = g.MeasureString(valAsStr, letterFont);
+                    var yLocation = chartStartPoint.Y - markShift * iValue;
+                    g.DrawString(valAsStr, letterFont, BlackSolidBrush,
+                        new PointF(chartBottomRight.X + markWidth + textSize.Width / 2, yLocation),
                         StringFormat);
                     g.DrawLine(DefaultPen,
-                        new Point(chartStart.X - markWidth / 2, yLocation),
-                        new Point(chartStart.X + markWidth / 2, yLocation));
-                    var startPoint = new Point(chartStart.X + markWidth / 2 + 2, yLocation);
+                        new PointF(chartStartPoint.X - markWidth / 2, yLocation),
+                        new PointF(chartStartPoint.X + markWidth / 2, yLocation));
+                    var startPoint = new PointF(chartStartPoint.X + markWidth / 2 + 2, yLocation);
                     if (iValue == BarChartMarkCount)
-                        startPoint.X = chartStart.X;
-                    g.DrawLine(DottedPen, startPoint, new Point(chartBottomRight.X, yLocation));
+                        startPoint.X = chartStartPoint.X;
+                    g.DrawLine(DottedPen, startPoint, new PointF(chartBottomRight.X, yLocation));
                 });
                 markValue += markShiftValue;
             }
@@ -112,7 +120,7 @@ namespace ChartWorld.UI
         private static void EnqueueBarsDrawing(List<(string, double)> items, Color[] colors, int shift, double max,
             int barWidth, Point chartStart, Size chartSize, float fontSizeMultiplier)
         {
-            var font = new Font("Arial", DefaultFontForLetters.Size * fontSizeMultiplier * 2);
+            var letterFont = new Font("Arial", DefaultFontForLetters.Size * fontSizeMultiplier * 3);
             var numberFont = new Font("Arial", DefaultFontForNumbers.Size * fontSizeMultiplier * 2);
             for (var i = 0; i < items.Count; i++)
             {
@@ -125,9 +133,9 @@ namespace ChartWorld.UI
                     var bar = new Rectangle(shiftValue, chartStart.Y - (int) barHeight, barWidth, (int) barHeight);
                     g.DrawRectangle(DefaultPen, bar);
                     g.FillRectangle(new SolidBrush(colors[iValue]), bar);
-                    var textSize = g.MeasureString(name, font);
-                    g.DrawString(name, font, BlackSolidBrush,
-                        new PointF(shiftValue + barWidth / 2, chartStart.Y + textSize.Height * 2), StringFormat);
+                    var textSize = g.MeasureString(name, letterFont, new PointF(0, 0), VerticalFormat);
+                    g.DrawString(name, letterFont, BlackSolidBrush,
+                        new PointF(shiftValue + barWidth / 2, chartStart.Y + textSize.Height * 0.65f), VerticalFormat);
                     var valAsStr = Math.Round(value, 2).ToString(CultureInfo.InvariantCulture);
                     textSize = g.MeasureString(valAsStr, numberFont);
                     g.DrawString(valAsStr, numberFont, BlackSolidBrush,
@@ -140,9 +148,10 @@ namespace ChartWorld.UI
 
         private static void PaintPieChart(PieChart chart, Size size, Point location)
         {
-            var multiplier = ScreenSize.Width / (float) ScreenSize.Width / 2;
+            var fullscreenChartSize = new Size(ScreenSize.Width / 2, ScreenSize.Height / 2);
+            var multiplier = size.Width / (float) fullscreenChartSize.Width;
             var data = chart.PercentageData.GetOrderedItems();
-            var circleSize = new Size(ScreenSize.Width / 2, ScreenSize.Height / 2);
+            var circleSize = new Size(size.Width / 4 * 3, size.Width / 4 * 3);
             var boundingRectangle = new Rectangle(location, circleSize);
             EnqueuePieChartDrawing(data, boundingRectangle, size, location, multiplier);
         }

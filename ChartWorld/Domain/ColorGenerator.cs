@@ -6,8 +6,8 @@ namespace ChartWorld.Domain
 {
     public static class ColorGenerator
     {
-        private static readonly HashSet<string> UsedColors = new();
         private static readonly Random Random = new();
+        private static HashSet<string> _usedColors = new();
         
         private static readonly string[] ColorsAsString =
         {
@@ -39,29 +39,19 @@ namespace ChartWorld.Domain
 
         public static Color[] GetColors(int count)
         {
-            if (count > MaxColorsCount)
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"Requested more colors than this method can provide: {UsedColors.Count}");
-            }
             var colors = new List<Color>();
             var i = 0;
             var converter = new ColorConverter();
-            while (i < count && UsedColors.Count != MaxColorsCount)
+            while (i < count && _usedColors.Count != MaxColorsCount)
             {
                 var index = Random.Next(0, MaxColorsCount);
-                if (!UsedColors.Contains(ColorsAsString[index]))
-                {
-                    colors.Add((Color) converter.ConvertFromString(ColorsAsString[index]));
-                    UsedColors.Add(ColorsAsString[index]);
-                    i++;
-                }
-            }
-
-            if (colors.Count == 0 || UsedColors.Count == MaxColorsCount && colors.Count < count)
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"All colors that this method can provide were used: {UsedColors.Count}");
+                if (_usedColors.Contains(ColorsAsString[index]))
+                    continue;
+                if (_usedColors.Count == MaxColorsCount)
+                    _usedColors = new HashSet<string>();
+                colors.Add((Color) converter.ConvertFromString(ColorsAsString[index]));
+                _usedColors.Add(ColorsAsString[index]);
+                i++;
             }
 
             return colors.ToArray();

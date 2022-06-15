@@ -59,7 +59,8 @@ namespace ChartWorld.UI
                 Image = new Bitmap(ResourceExplorer.PathToImages + name),
                 Location = location,
                 Size = new Size(50, 50),
-                BackColor = Color.Transparent
+                BackColor = Color.Transparent,
+                Anchor = AnchorStyles.Top
             };
         }
     }
