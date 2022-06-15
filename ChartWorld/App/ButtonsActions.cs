@@ -4,11 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 using ChartWorld.Domain.Workspace;
 
-namespace ChartWorld.UI
+namespace ChartWorld.App
 {
     public static class ButtonsActions
     {
-        public static void OpenAction(ChartWindow form,
+        public static void OpenAction(Form form,
             List<PictureBox> controlButtons, List<Action> initializingActions)
         {
             foreach (var button in controlButtons
@@ -22,7 +22,7 @@ namespace ChartWorld.UI
         }
 
         public static void ClearAction(
-            Control clearButton, ChartWindow form, Workspace workspace)
+            Control clearButton, Form form, Workspace workspace)
         {
             PictureBox openButton = null;
             foreach (var control in form.Controls)

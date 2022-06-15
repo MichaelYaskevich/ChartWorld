@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using ChartWorld.App;
-using ChartWorld.Domain.Statistic;
 using ChartWorld.Domain.Workspace;
 using Timer = System.Windows.Forms.Timer;
 
@@ -15,12 +13,11 @@ namespace ChartWorld.UI
     {
         public static Queue<Action<Graphics>> ToPaint { get; } = new();
         private static Workspace Workspace { get; set; }
-        public static ICommandsExecutor Executor { get; set; }
 
-        public ChartWindow(Workspace workspace, ICommandsExecutor executor)
+        public ChartWindow(Workspace workspace)
         {
             Workspace = workspace;
-            Executor = executor;
+            EntityHandler.Form = this;
             InitializeComponent();
             DoubleBuffered = true;
             SettingsLoader.LoadDefaultSettings(this);

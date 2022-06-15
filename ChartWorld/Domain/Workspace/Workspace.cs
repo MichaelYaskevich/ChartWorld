@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using ChartWorld.Domain.Statistic;
 using ChartWorld.Infrastructure;
 
 namespace ChartWorld.Domain.Workspace
@@ -8,13 +9,14 @@ namespace ChartWorld.Domain.Workspace
     public class Workspace : ICanMakeAction
     {
         private List<WorkspaceEntity> WorkspaceEntities { get; } = new();
+        public ICommandsExecutor Executor { get; }
         public ICanMakeAction SelectedEntity { get; set; }
         public SelectionType SelectionType { get; private set; }
         public bool WasModified { get; set; }
 
-        public Workspace()
+        public Workspace(ICommandsExecutor executor)
         {
-            // TODO: Retrieve()
+            Executor = executor;
         }
 
         public IEnumerable<WorkspaceEntity> GetWorkspaceEntities()
@@ -51,21 +53,33 @@ namespace ChartWorld.Domain.Workspace
             WorkspaceEntities.Clear();
         }
 
-        public WorkspaceEntity Add(Control.ControlCollection controls, object entity, Size size, Point location,
-            List<PictureBox> interactionButtons = null)
+        public void Add(WorkspaceEntity entity)
         {
-            var buttons = InitialiseButtons(controls, interactionButtons, location);
-            var workspaceEntity = new WorkspaceEntity(entity, size, location, buttons);
-            WorkspaceEntities.Add(workspaceEntity);
-            buttons[0].Click += (_, _) =>
-            {
-                WorkspaceEntities.Remove(workspaceEntity);
-                foreach (var button in workspaceEntity.InteractionButtons)
-                    controls.Remove(button);
-                WasModified = true;
-            };
-            return workspaceEntity;
+            if (!WorkspaceEntities.Contains(entity))
+                WorkspaceEntities.Add(entity);
         }
+
+        public void Delete(WorkspaceEntity entity)
+        {
+            WorkspaceEntities.Remove(entity);
+            WasModified = true;
+        }
+
+        // public WorkspaceEntity Add(Control.ControlCollection controls, object entity, Size size, Point location,
+        //     List<PictureBox> interactionButtons = null)
+        // {
+        //     var buttons = InitialiseButtons(controls, interactionButtons, location);
+        //     var workspaceEntity = new WorkspaceEntity(entity, size, location, buttons);
+        //     WorkspaceEntities.Add(workspaceEntity);
+        //     buttons[0].Click += (_, _) =>
+        //     {
+        //         WorkspaceEntities.Remove(workspaceEntity);
+        //         foreach (var button in workspaceEntity.InteractionButtons)
+        //             controls.Remove(button);
+        //         WasModified = true;
+        //     };
+        //     return workspaceEntity;
+        // }
 
         private List<PictureBox> InitialiseButtons(Control.ControlCollection controls,
             List<PictureBox> interactionButtons, Point location)

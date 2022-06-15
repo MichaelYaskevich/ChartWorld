@@ -1,4 +1,5 @@
 ﻿using ChartWorld.Domain.Chart.ChartData;
+using ChartWorld.Domain.Workspace;
 
 namespace ChartWorld.Domain.Statistic.Commands
 {
@@ -6,7 +7,7 @@ namespace ChartWorld.Domain.Statistic.Commands
     {
         public CumulativeSumCommand() : base("Кумулятивная сумма") {}
         
-        public override void Execute(object[] args) => 
+        public override WorkspaceChart Execute(object[] args) => 
             HelpMethods.MakeChartFromStatistic(args, GetNewData);
         private ChartData GetNewData(ChartData data) => data.GetCumulativeSum();
     }

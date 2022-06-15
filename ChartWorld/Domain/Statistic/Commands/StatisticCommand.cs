@@ -1,4 +1,6 @@
-﻿namespace ChartWorld.Domain.Statistic.Commands
+﻿using ChartWorld.Domain.Workspace;
+
+namespace ChartWorld.Domain.Statistic.Commands
 {
     public abstract class StatisticCommand
     {
@@ -8,7 +10,7 @@
         }
 
         public string Name { get; }
-        public abstract void Execute(object[] args);
+        public abstract WorkspaceEntity Execute(object[] args);
 
     }
 }

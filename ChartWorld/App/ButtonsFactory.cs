@@ -5,12 +5,12 @@ using System.Windows.Forms;
 using ChartWorld.Domain.Workspace;
 using ChartWorld.Infrastructure;
 
-namespace ChartWorld.UI
+namespace ChartWorld.App
 {
     public static class ButtonsFactory
     {
         public static PictureBox CreateOpenButton(
-            ChartWindow form, List<PictureBox> controlButtons, List<Action> initializingActions)
+            Form form, List<PictureBox> controlButtons, List<Action> initializingActions)
         {
             var openButton = GetSimpleButton(
                 "OpenButton", "open_button.png", new Point(0, 0));
@@ -20,7 +20,7 @@ namespace ChartWorld.UI
             return openButton;
         }
 
-        public static PictureBox CreateClearButton(ChartWindow form, Workspace workspace)
+        public static PictureBox CreateClearButton(Form form, Workspace workspace)
         {
             var clearButton = GetSimpleButton(
                 "ClearButton", "clear_button.png", new Point(60, 0));
@@ -74,6 +74,18 @@ namespace ChartWorld.UI
                 Image = new Bitmap(ResourceExplorer.PathToImages + "move_button.png"),
                 Visible = true,
                 BackColor = Color.Transparent
+            };
+            return button;
+        }
+        
+        public static PictureBox CreateCloseButton()
+        {
+            var button = new PictureBox
+            {
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Tag = "CloseButton",
+                Image = new Bitmap(ResourceExplorer.PathToImages + "close_button.png"),
+                Visible = true
             };
             return button;
         }
