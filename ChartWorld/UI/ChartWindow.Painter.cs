@@ -74,7 +74,7 @@ namespace ChartWorld.UI
             var barWidth = chartSize.Width / items.Count / 3;
             var max = items.Max(x => x.Item2);
             var fontSizeMultiplier = chartSize.Width / (float) fullscreenChartSize.Width;
-            EnqueueAxisDrawing(chart.Data.Headers, size.Width / 100, chartSize.Height / BarChartMarkCount,
+            EnqueueAxisDrawing(chart.Data.Headers.ToArray(), size.Width / 100, chartSize.Height / BarChartMarkCount,
                 (int) max / BarChartMarkCount,
                 chartStartPoint, chartBottomRight, chartTopLeft, fontSizeMultiplier);
             EnqueueBarsDrawing(items, SetColors(items.Count, ref _barColors), chartStartPoint.X + chartSize.Width / 20,

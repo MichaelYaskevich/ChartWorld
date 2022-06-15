@@ -86,6 +86,7 @@ namespace ChartWorld.Domain.Workspace
             return result;
         }
 
+        //TODO: кнопки не тут
         private static PictureBox MakeCloseButton()
         {
             var button = new PictureBox

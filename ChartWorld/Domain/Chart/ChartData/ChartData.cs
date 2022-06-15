@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ChartWorld.Infrastructure;
+using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace ChartWorld.Domain.Chart.ChartData
 {
     public class ChartData : IChartData
     {
         private Dictionary<string, double> Dictionary { get; } = new();
-        public string[] Headers { get; }
+        public List<string> Headers { get; }
         private List<string> Keys { get; } = new();
 
-        public ChartData((string[], IEnumerable<(string, double)>) headersWithItems)
+        public ChartData((List<string>, IEnumerable<(string, double)>) headersWithItems)
         {
             var (headers, items) = headersWithItems;
             Headers = headers;
@@ -35,17 +37,31 @@ namespace ChartWorld.Domain.Chart.ChartData
             }
         }
 
-        public static ChartData Create(string csvPath)
+        public static ChartData Create(string path)
+        {
+            if (path.EndsWith(".xlsx"))
+                return CreateFromXlsx(path);
+            return path.EndsWith(".csv") ? CreateFromCsv(path) : null;
+        }
+
+        private static ChartData CreateFromCsv(string csvPath)
         {
             try
             {
                 var data = CsvParser.Parse(csvPath);
                 return new ChartData(data);
             }
-            catch (CsvHelper.CsvHelperException _)
+            catch (CsvHelper.CsvHelperException _) { return null; }
+        }
+        
+        private static ChartData CreateFromXlsx(string xlsxPath)
+        {
+            try
             {
-                return null;
+                var data = XlsxParser.Parse(xlsxPath);
+                return new ChartData(data);
             }
+            catch (ExcelErrorValueException _) { return null; }
         }
 
         public IEnumerable<(string, double)> GetOrderedItems()
