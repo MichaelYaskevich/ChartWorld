@@ -22,12 +22,13 @@ namespace ChartWorld.UI
             Alignment = StringAlignment.Center
         };
 
+        private const string SelectFromDrivePrompt = "... Select .csv from drive";
+
         private static ComboBox _chartTypeDdl;
         private static ComboBox _chartDataDdl;
         private static ChartWindow _form;
         private static Workspace _workspace;
         private static ChartData _selectedData;
-        private static Type _selectedChartType;
 
         public static void InitializeStartButtons(ChartWindow form, Workspace workspace)
         {
@@ -44,7 +45,6 @@ namespace ChartWorld.UI
             {
                 InitializeChartDataSelection,
                 InitializeChartTypeSelection,
-                // InitializeChartDataSelectionFromDrive
             };
             HomeControlButtons.Add(ButtonsFactory.CreateOpenButton(
                 form, HomeControlButtons, initializingActions));
@@ -52,43 +52,9 @@ namespace ChartWorld.UI
                 form.Controls.Add(button);
         }
 
-        // private static void InitializeChartDataSelectionFromDrive()
-        // {
-        //     var chartDataSelectionButton = new Button();
-        //     chartDataSelectionButton.Text = $"Select .csv from drive";
-        //     chartDataSelectionButton.Location = new Point(_chartDataDdl.Location.X,
-        //         _chartDataDdl.Location.Y + _chartDataDdl.Size.Height);
-        //     chartDataSelectionButton.Size = _chartDataDdl.Size;
-        //     chartDataSelectionButton.Click += ChartDataSelectionFromDriveButtonOnClick;
-        //     _form.Controls.Add(chartDataSelectionButton);
-        // }
-        
-        // private static void ChartDataSelectionFromDriveButtonOnClick(object sender, EventArgs e)
-        // {
-        //     var openFileDialog = new OpenFileDialog();
-        //     var result = openFileDialog.ShowDialog(); // Show the dialog.
-        //     if (result != DialogResult.OK) 
-        //         return;
-        //     
-        //     var path = openFileDialog.FileName;
-        //
-        //     _selectedData = new ChartData(path + _chartDataDdl.SelectedItem);
-        //
-        //     if (_selectedChartType is not null)
-        //     {
-        //         var chart = (IChart) Activator.CreateInstance(
-        //             GetSelectedChartType(), _selectedData);
-        //         WorkspaceEntityFactory.CreateWorkspaceEntity(chart, _form, _workspace, _chartTypeDdl);
-        //         var entity = _workspace.Add(_form.Controls, chart, new Size(500, 500), new Point(100, 100));
-        //         Painter.Paint(entity, _form);
-        //     }
-        //
-        //     _form.Update();
-        // }
-
         private static void InitializeChartDataSelection()
         {
-            _chartDataDdl = new ComboBox();
+            _chartDataDdl = new ComboBox { Anchor = AnchorStyles.Top | AnchorStyles.Left };
             _chartDataDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartDataDdl.Text = "Choose the stats you want to visualize";
             _chartDataDdl.Location = new Point(0, 0);
@@ -99,6 +65,7 @@ namespace ChartWorld.UI
                 .Select(name => name)
                 .Cast<object>()
                 .ToArray());
+            _chartDataDdl.Items.Add(SelectFromDrivePrompt);
             _chartDataDdl.SelectedValueChanged += ChartDataDdlSelectedItemChanged;
             _form.Controls.Add(_chartDataDdl);
         }
@@ -112,9 +79,7 @@ namespace ChartWorld.UI
 
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            _selectedData = ChartData.Create(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
-
-            if (_selectedData == null)
+            if (_chartDataDdl.SelectedItem.ToString() == SelectFromDrivePrompt)
             {
                 var location = new Point(Painter.ScreenSize.Width / 2, 10);
                 var incorrectFileButton = ButtonsFactory.CreateIncorrectFileButton(location);
@@ -130,19 +95,24 @@ namespace ChartWorld.UI
             }
             else if (_selectedChartType is not null)
             {
-                var chart = (IChart) Activator.CreateInstance(
-                    GetSelectedChartType(), _selectedData);
-                WorkspaceEntityFactory.CreateWorkspaceEntity(chart, _form, _workspace, _chartTypeDdl);
-                var entity = _workspace.Add(_form.Controls, chart, new Size(500, 500), new Point(100, 100));
-                Painter.Paint(entity, _form);
+                var openFileDialog = new OpenFileDialog();
+                var result = openFileDialog.ShowDialog();
+                if (result != DialogResult.OK) 
+                    return;
+            
+                var path = openFileDialog.FileName;
+        
+                _selectedData = new ChartData(path);
             }
+            else
+                _selectedData = new ChartData(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
 
             _form.Update();
         }
 
         private static void InitializeChartTypeSelection()
         {
-            _chartTypeDdl = new ComboBox();
+            _chartTypeDdl = new ComboBox { Anchor = AnchorStyles.Top | AnchorStyles.Right };
             _chartTypeDdl.DropDownStyle = ComboBoxStyle.DropDownList;
             _chartTypeDdl.Text = "Choose the type of chart";
             _chartTypeDdl.Size = new Size(
@@ -159,7 +129,6 @@ namespace ChartWorld.UI
 
         private static void ChartTypeDdlSelectedItemChanged(object sender, EventArgs e)
         {
-            _selectedChartType = null;
             var chart = (IChart) Activator.CreateInstance(
                 GetSelectedChartType(), _selectedData);
             if (IsNullSelectedData())
@@ -184,7 +153,7 @@ namespace ChartWorld.UI
             ChartWindow.ToPaint.Enqueue(g =>
             {
                 var font = new Font("Arial", 10, FontStyle.Regular);
-                var errorMessage = "Error: Data for chart is not selected";
+                const string errorMessage = "Error: Data for chart is not selected";
                 var textSize = g.MeasureString(errorMessage, font);
                 g.DrawString(errorMessage, font,
                     new SolidBrush(Color.Black),
@@ -197,13 +166,10 @@ namespace ChartWorld.UI
 
         private static Type GetSelectedChartType()
         {
-            if (_selectedChartType is not null)
-                return _selectedChartType;
             var name = _chartTypeDdl.SelectedItem
                 .ToString()?.Replace(" ", string.Empty);
-            _selectedChartType = HelpMethods.GetImplementations(typeof(IChart))
+            return HelpMethods.GetImplementations(typeof(IChart))
                 .FirstOrDefault(t => t.Name == name);
-            return _selectedChartType;
         }
     }
 }
