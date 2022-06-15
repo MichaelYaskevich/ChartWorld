@@ -1,17 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ChartWorld;
-using ChartWorld.App;
-using ChartWorld.Domain.Workspace;
-using ChartWorld.UI;
 using FluentAssertions;
 using NUnit.Framework;
 
-
-namespace Tests.App
+namespace Tests.Domain.Workspace
 {
     [TestFixture]
-    public class WorkspaceEntityFactoryTests
+    public class ExecutorTests
     {
         [Test]
         public static void GetAvailableCommandNameTest()

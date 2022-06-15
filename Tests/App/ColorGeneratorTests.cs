@@ -15,19 +15,6 @@ namespace Tests.App
     public class ColorGeneratorTests
     {
         [Test]
-        public static void GeneratingColorsFailsWhenGettingMoreThanMethodCanProvideAtOnce()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ColorGenerator.GetColors(int.MaxValue));
-        }
-
-        [Test]
-        public static void GeneratingColorsFailsWhenGettingMoreColorsThanMethodCanProvide()
-        {
-            Assert.DoesNotThrow(() => ColorGenerator.GetColors(ColorGenerator.MaxColorsCount));
-            Assert.Throws<ArgumentOutOfRangeException>(() => ColorGenerator.GetColors(1));
-        }
-
-        [Test]
         public static void GeneratingColorsDoesNotReturnSameColors()
         {
             var colors = ColorGenerator.GetColors(ColorGenerator.MaxColorsCount);

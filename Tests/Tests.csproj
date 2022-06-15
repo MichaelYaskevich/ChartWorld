@@ -18,12 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Resources\ChartDataWithManyValuesForName.csv" />
-      <EmbeddedResource Include="Resources\ChartDataWithOneValueForName.csv" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\Images" />
+      <Folder Include="Domain" />
     </ItemGroup>
 
 </Project>

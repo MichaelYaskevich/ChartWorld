@@ -1,4 +1,5 @@
 ﻿using ChartWorld.Domain.Chart.ChartData;
+using ChartWorld.Infrastructure;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -7,7 +8,7 @@ namespace Tests.Statistic
     [TestFixture]
     public static class ChartDataTests
     {
-        [TestCase("ChartWorld.Resources.ChartDataWithOneValueForName.csv",
+        [TestCase("ChartDataWithOneValueForName.csv",
             new[]
             {
                 "January", "February", "March", "April",
@@ -16,7 +17,7 @@ namespace Tests.Statistic
             },
             new[] {5.0, 15, 5, 10, 15, 25, 30, 40, 60, 70, 50, 30},
             TestName = "ChartDataWithOneValueForName")]
-        [TestCase("ChartWorld.Resources.ChartDataWithManyValuesForName.csv",
+        [TestCase("ChartDataWithManyValuesForName.csv",
             new[]
             {
                 "Winter#1", "Winter#2", "Winter#3",
@@ -26,8 +27,9 @@ namespace Tests.Statistic
             },
             new[] {30.0, 5, 15, 5, 10, 15, 25, 30, 40, 60, 70, 50},
             TestName = "ChartDataWithManyValuesForName")]
-        public static void ChartDataCtorParseCsvRight(string csvPath, string[] keys, double[] values)
+        public static void ChartDataCtorParseCsvRight(string localPath, string[] keys, double[] values)
         {
+            var csvPath = ResourceExplorer.PathToResources + localPath;
             var chartData = ChartData.Create(csvPath);
 
             chartData.GetOrderedItems().Should().HaveCount(values.Length);
