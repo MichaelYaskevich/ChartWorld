@@ -35,8 +35,8 @@ namespace Tests.App
 
         private static void RefreshResources()
         {
-            Workspace = new ChartWorld.Domain.Workspace.Workspace();
-            Form = new ChartWindow(Workspace, null);
+            Workspace = new ChartWorld.Domain.Workspace.Workspace(null);
+            Form = new ChartWindow(Workspace);
             Form.Controls.Clear();
         }
 
@@ -52,27 +52,6 @@ namespace Tests.App
 
             Form.Controls.Count.Should().Be(0);
             log.Should().Be("12");
-
-            RefreshResources();
-        }
-
-        [Test]
-        public static void ClearButtonTest()
-        {
-            foreach (var button in Buttons)
-                Form.Controls.Add(button);
-
-            Workspace.Add(Form.Controls, "entity", Size.Empty, Point.Empty);
-
-            var clearButton = Buttons.First(x => (string) x.Tag == "ClearButton");
-            ButtonsActions.ClearAction(clearButton, Form, Workspace);
-
-            Form.Controls.Count.Should().Be(2);
-            Form.Controls[0].Should().Be(clearButton);
-            Form.Controls[1].Should().BeOfType(typeof(PictureBox));
-            (Form.Controls[1] as PictureBox)!.Tag.Should().Be("OpenButton");
-
-            Workspace.GetWorkspaceEntities().Should().HaveCount(0);
 
             RefreshResources();
         }

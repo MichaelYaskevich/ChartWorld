@@ -1,4 +1,5 @@
 ﻿using ChartWorld.Domain.Statistic.Commands;
+using ChartWorld.Domain.Workspace;
 
 namespace ChartWorld.Domain.Statistic
 {
@@ -8,6 +9,6 @@ namespace ChartWorld.Domain.Statistic
 
         public StatisticCommand FindCommandByName(string name);
 
-        public void Execute(string commandName, object[] args);
+        public WorkspaceEntity Execute(string commandName, object[] args);
     }
 }

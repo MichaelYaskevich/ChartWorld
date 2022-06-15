@@ -20,9 +20,8 @@ namespace ChartWorld
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var workspace = new Workspace();
-            var executor = CreateExecutor();
-            Application.Run(new ChartWindow(workspace, executor));
+            var workspace = new Workspace(CreateExecutor());
+            Application.Run(new ChartWindow(workspace));
         }
 
         public static ICommandsExecutor CreateExecutor()

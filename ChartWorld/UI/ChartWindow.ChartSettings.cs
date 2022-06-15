@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ChartWorld.App;
@@ -97,10 +96,10 @@ namespace ChartWorld.UI
             {
                 var openFileDialog = new OpenFileDialog();
                 var result = openFileDialog.ShowDialog();
-                if (result != DialogResult.OK) 
-                    return;
-            
-                var path = openFileDialog.FileName;
+                var entity = new WorkspaceChart(_workspace, chart,
+                    new Size(500, 500), new Point(100, 100));
+                EntityHandler.AddButtons(entity);
+                
         
                 _selectedData = new ChartData(path);
             }
@@ -136,7 +135,9 @@ namespace ChartWorld.UI
             if (chart is null)
                 throw new ArgumentNullException(nameof(chart));
 
-            WorkspaceEntityFactory.CreateWorkspaceEntity(chart, _form, _workspace, _chartTypeDdl);
+            var entity = new WorkspaceChart(_workspace, chart,
+                new Size(500, 500), new Point(100, 100));
+            EntityHandler.AddButtons(entity);
 
             foreach (var button in HomeControlButtons)
                 _form.Controls.Add(button);

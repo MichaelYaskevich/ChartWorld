@@ -1,7 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using ChartWorld.Domain.Workspace;
 
-namespace ChartWorld.App
+namespace ChartWorld.UI
 {
     public static class ToolsForActions
     {
@@ -18,25 +19,53 @@ namespace ChartWorld.App
             }
         }
 
+        private static void MoveButtons(ICanMakeAction entity, int shiftX, int shiftY)
+        {
+            if (entity is Workspace workspace)
+            {
+                foreach (var wsEntity in workspace.GetWorkspaceEntities())
+                    MoveButtons(wsEntity, shiftX, shiftY);
+            }
+            else if (entity is WorkspaceEntity wsEntity)
+            {
+                var buttons = EntityHandler.Buttons[wsEntity];
+                foreach (var button in buttons)
+                {
+                    button.Location = new Point(
+                        button.Location.X + shiftX,
+                        button.Location.Y + shiftY);
+                }
+            }
+        }
+
         private static void MakeMoveAction(Keys keyCode, ICanMakeAction entity)
         {
+            var (shiftX, shiftY) = (0, 0);
+            var shouldMove = true;
             switch (keyCode)
             {
                 case Keys.Up:
-                    entity.Move(0, -10);
+                    (shiftX, shiftY) = (0, -10);
                     break;
                 case Keys.Down:
-                    entity.Move(0, 10);
+                    (shiftX, shiftY) = (0, 10);
                     break;
                 case Keys.Left:
-                    entity.Move(-10, 0);
+                    (shiftX, shiftY) = (-10, 0);
                     break;
                 case Keys.Right:
-                    entity.Move(10, 0);
+                    (shiftX, shiftY) = (10, 0);
                     break;
                 default:
+                    shouldMove = false;
                     //TODO: показывать информацию о том какие кнопки нажать
                     break;
+            }
+
+            if (shouldMove)
+            {
+                entity.Move(shiftX, shiftY);
+                MoveButtons(entity, shiftX, shiftY);
             }
         }
 

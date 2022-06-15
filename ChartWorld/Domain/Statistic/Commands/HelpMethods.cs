@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using ChartWorld.Domain.Chart;
 using ChartWorld.Domain.Chart.ChartData;
 using ChartWorld.Domain.Workspace;
@@ -10,46 +8,39 @@ namespace ChartWorld.Domain.Statistic.Commands
 {
     public static class HelpMethods
     {
-        public static void MakeChartFromStatistic(WorkspaceEntity entity,
-            ChartData data, Form form, Workspace.Workspace workspace, ComboBox comboBox)
+        public static WorkspaceChart MakeChartFromStatistic(WorkspaceEntity entity,
+            ChartData data, Workspace.Workspace workspace)
         {
             var chart = new BarChart(data);
-            WorkspaceEntityFactory.CreateWorkspaceEntity(chart, form, workspace, comboBox,
+            return new WorkspaceChart(
+                workspace, chart, new Size(500, 500), 
                 new Point(entity.Location.X + entity.Size.Width + 50, entity.Location.Y));
-            form.Update();
         }
         
-        public static void MakeChartFromStatistic(object[] args, Func<ChartData, ChartData> getNewData)
+        public static WorkspaceChart MakeChartFromStatistic(object[] args, Func<ChartData, ChartData> getNewData)
         {
             var parsedArgs = ParseArgs(args);
-            if (parsedArgs is null) return;
-            var (entity, data, form, workspace, box) = parsedArgs.Value;
-            MakeChartFromStatistic(entity, getNewData(data), form, workspace, box);
+            if (parsedArgs is null) return null;
+            var (entity, data, workspace) = parsedArgs.Value;
+            return MakeChartFromStatistic(entity, getNewData(data), workspace);
         }
 
-        public static void MakeTextFromStatistic(object[] args, Func<ChartData, string> convertToString)
+        public static WorkspaceEntity MakeTextFromStatistic(object[] args, Func<ChartData, string> convertToString)
         {
             var parsedArgs = ParseArgs(args);
-            if (parsedArgs is null) return;
-            var (entity, data, form, workspace, box) = parsedArgs.Value;
-            workspace.Add(
-                form.Controls,
-                convertToString(data),
-                new Size(300, 100),
-                new Point(entity.Location.X + entity.Size.Width + 50, entity.Location.Y),
-                new List<PictureBox> {});
-            form.Update();
+            if (parsedArgs is null) return null;
+            var (entity, data, workspace) = parsedArgs.Value;
+            return new WorkspaceEntity(workspace, convertToString(data), new Size(300, 300),
+                new Point(entity.Location.X + entity.Size.Width + 50, entity.Location.Y));
         }
 
-        public static (WorkspaceEntity, ChartData, Form, Workspace.Workspace, ComboBox)? ParseArgs(object[] args)
+        private static (WorkspaceEntity, ChartData, Workspace.Workspace)? ParseArgs(object[] args)
         {
             if (args[0] is WorkspaceEntity entity
                 && args[1] is ChartData data
-                && args[2] is Form form
-                && args[3] is Workspace.Workspace workspace
-                && args[4] is ComboBox box)
+                && args[2] is Workspace.Workspace workspace)
             {
-                return (entity, data, form, workspace, box);
+                return (entity, data, workspace);
             }
 
             return null;

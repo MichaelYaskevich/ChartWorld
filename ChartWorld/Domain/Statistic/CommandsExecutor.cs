@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ChartWorld.Domain.Statistic.Commands;
+using ChartWorld.Domain.Workspace;
 
 namespace ChartWorld.Domain.Statistic
 {
@@ -24,11 +25,10 @@ namespace ChartWorld.Domain.Statistic
                 string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void Execute(string commandName, object[] args)
+        public WorkspaceEntity Execute(string commandName, object[] args)
         {
             var cmd = FindCommandByName(commandName);
-            if (cmd != null)
-                cmd.Execute(args);
+            return cmd?.Execute(args);
         }
     }
 }
