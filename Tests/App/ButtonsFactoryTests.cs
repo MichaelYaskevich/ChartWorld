@@ -13,7 +13,7 @@ namespace Tests.App
     [TestFixture]
     public class ButtonsFactoryTests
     {
-        //TODO: починить все тесты
+        //TODO: поправить иерархию папок в тест
         private static ChartWindow Form { get; set; }
         private static ChartWorld.Domain.Workspace.Workspace Workspace { get; set; }
         private static List<PictureBox> Buttons { get; set; }

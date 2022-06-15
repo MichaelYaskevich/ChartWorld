@@ -16,7 +16,7 @@ namespace Tests.Statistic
         public static void SetUp()
         {
             ChartData = new ChartData((
-                new[] {"first", "second"},
+                new List<string>() {"first", "second"},
                 new List<(string, double)>
                 {
                     ("a", -1.0),

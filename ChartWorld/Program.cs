@@ -21,7 +21,7 @@ namespace ChartWorld
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var workspace = new Workspace();
-            ICommandsExecutor executor = CreateExecutor();
+            var executor = CreateExecutor();
             Application.Run(new ChartWindow(workspace, executor));
         }
 
