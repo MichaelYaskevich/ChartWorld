@@ -13,7 +13,7 @@ namespace ChartWorld.UI
 {
     public static class ChartSettings
     {
-        private static readonly List<PictureBox> HomeControlButtons = new();
+        private static readonly List<PictureBox> ControlButtons = new();
 
         private static readonly StringFormat Sf = new()
         {
@@ -35,19 +35,19 @@ namespace ChartWorld.UI
             _workspace = workspace;
 
             var screenMiddle = Painter.ScreenSize.Width / 2;
-            HomeControlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
-            HomeControlButtons.Add(ButtonsFactory.CreateMoveButton(
+            ControlButtons.Add(ButtonsFactory.CreateClearButton(form, workspace));
+            ControlButtons.Add(ButtonsFactory.CreateMoveButton(
                 workspace, new Point(screenMiddle - 55, 10)));
-            HomeControlButtons.Add(ButtonsFactory.CreateResizingButton(
+            ControlButtons.Add(ButtonsFactory.CreateResizingButton(
                 workspace, new Point(screenMiddle + 5, 10)));
             var initializingActions = new List<Action>
             {
                 InitializeChartDataSelection,
                 InitializeChartTypeSelection,
             };
-            HomeControlButtons.Add(ButtonsFactory.CreateOpenButton(
-                form, HomeControlButtons, initializingActions));
-            foreach (var button in HomeControlButtons)
+            ControlButtons.Add(ButtonsFactory.CreateOpenButton(
+                form, ControlButtons, initializingActions));
+            foreach (var button in ControlButtons)
                 form.Controls.Add(button);
         }
 
@@ -69,42 +69,21 @@ namespace ChartWorld.UI
             _form.Controls.Add(_chartDataDdl);
         }
 
-        private static void GoHome()
-        {
-            _form.Controls.Clear();
-            foreach (var button in HomeControlButtons)
-                _form.Controls.Add(button);
-        }
-
         private static void ChartDataDdlSelectedItemChanged(object sender, EventArgs e)
         {
             if (_chartDataDdl.SelectedItem.ToString() == SelectFromDrivePrompt)
             {
-                var location = new Point(Painter.ScreenSize.Width / 2, 10);
-                var incorrectFileButton = ButtonsFactory.CreateIncorrectFileButton(location);
-                location.X -= incorrectFileButton.Size.Width / 2;
-                incorrectFileButton.Location = location;
-                var okButton = ButtonsFactory.CreateOkButton(
-                    new Point(location.X, location.Y + incorrectFileButton.Size.Height + 10));
-                
-                _form.Controls.Add(incorrectFileButton);
-                _form.Controls.Add(okButton);
-
-                okButton.Click += (_, _) => { GoHome(); };
-            }
-            else if (_selectedChartType is not null)
-            {
                 var openFileDialog = new OpenFileDialog();
                 var result = openFileDialog.ShowDialog();
-                var entity = new WorkspaceChart(_workspace, chart,
-                    new Size(500, 500), new Point(100, 100));
-                EntityHandler.AddButtons(entity);
-                
+                if (result != DialogResult.OK) 
+                    return;
+            
+                var path = openFileDialog.FileName;
         
-                _selectedData = new ChartData(path);
+                _selectedData = ChartData.Create(path);
             }
             else
-                _selectedData = new ChartData(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
+                _selectedData = ChartData.Create(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
 
             _form.Update();
         }
@@ -139,7 +118,7 @@ namespace ChartWorld.UI
                 new Size(500, 500), new Point(100, 100));
             EntityHandler.AddButtons(entity);
 
-            foreach (var button in HomeControlButtons)
+            foreach (var button in ControlButtons)
                 _form.Controls.Add(button);
             _form.Controls.Remove(_chartDataDdl);
             _form.Controls.Remove(_chartTypeDdl);
