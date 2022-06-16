@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <Folder Include="Domain" />
+      <Folder Include="Infrastructure\Resources" />
     </ItemGroup>
 
 </Project>

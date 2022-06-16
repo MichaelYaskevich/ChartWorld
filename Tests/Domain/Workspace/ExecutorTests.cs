@@ -17,7 +17,7 @@ namespace Tests.Domain.Workspace
                 "Кумулятивное произведение","Кумулятивная сумма", "Математическое ожидание",
                 "Элементы с максимальным значением", "Элементы с минимальным значением"
             };
-            var executor = Program.CreateExecutor();
+            var executor = Configurator.CreateExecutor();
             
             var allNamesActual = executor.GetAvailableCommandNames();
 

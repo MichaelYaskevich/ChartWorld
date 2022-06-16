@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ChartWorld.Infrastructure;
-using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace ChartWorld.Domain.Chart.ChartData
 {
