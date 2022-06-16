@@ -60,7 +60,7 @@ namespace ChartWorld.UI
             _chartDataDdl.Size = new Size(
                 Painter.ScreenSize.Width / 6,
                 Painter.ScreenSize.Height);
-            _chartDataDdl.Items.AddRange(ResourceExplorer.GetAllCsvFileNames()
+            _chartDataDdl.Items.AddRange(ResourceExplorer.GetAllInputFileNames()
                 .Select(name => name)
                 .Cast<object>()
                 .ToArray());

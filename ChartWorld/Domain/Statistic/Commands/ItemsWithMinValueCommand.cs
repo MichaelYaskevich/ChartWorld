@@ -10,7 +10,6 @@ namespace ChartWorld.Domain.Statistic.Commands
 
         public override WorkspaceEntity Execute(object[] args)
         {
-            //TODO: красивл выводить или тоже сделать диаграмму
             return HelpMethods.MakeTextFromStatistic(args, 
                 data => string.Join('\n', data
                     .GetItemsWithMinValue()

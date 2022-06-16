@@ -4,12 +4,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace ChartWorld.Infrastructure
 {
-    public static class CsvParser
+    public class CsvParser : IParser
     {
-        public static (List<string>, IEnumerable<(string, double)>) Parse(string csvPath)
+        public (List<string>, IEnumerable<(string, double)>) Parse(string csvPath)
         {
             using var csvReader = new StreamReader(csvPath);
             using var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture, true);
@@ -19,8 +20,8 @@ namespace ChartWorld.Infrastructure
             
             return (headers, ParseFields(csvPath));
         }
-
-        private static IEnumerable<(string, double)> ParseFields(string csvPath)
+        
+        private IEnumerable<(string, double)> ParseFields(string csvPath)
         {
             using var csvReader = new StreamReader(csvPath);
             using var csv = new CsvReader(csvReader, CultureInfo.InvariantCulture);

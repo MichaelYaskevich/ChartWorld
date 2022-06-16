@@ -19,7 +19,7 @@ namespace ChartWorld.Infrastructure
             return dir;
         }
         
-        public static IEnumerable<string> GetAllCsvFileNames()
+        public static IEnumerable<string> GetAllInputFileNames()
         {
             var workingDirectory = Environment.CurrentDirectory;
             var projectDirectory = Directory

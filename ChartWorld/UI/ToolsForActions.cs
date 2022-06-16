@@ -58,7 +58,6 @@ namespace ChartWorld.UI
                     break;
                 default:
                     shouldMove = false;
-                    //TODO: показывать информацию о том какие кнопки нажать
                     break;
             }
 

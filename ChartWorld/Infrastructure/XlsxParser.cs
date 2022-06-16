@@ -8,14 +8,14 @@ using OfficeOpenXml.FormulaParsing.Exceptions;
 
 namespace ChartWorld.Infrastructure
 {
-    public static class XlsxParser
+    public class XlsxParser : IParser
     {
-        static XlsxParser()
+        public XlsxParser()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         }
 
-        public static (List<string>, IEnumerable<(string, double)>) Parse(string xlsxPath)
+        public (List<string>, IEnumerable<(string, double)>) Parse(string xlsxPath)
         {
             var first = true;
             var headers = new List<string>();
@@ -31,8 +31,6 @@ namespace ChartWorld.Infrastructure
                     }
                     for (var i = 1; i < headers.Count; i++)
                     {
-                        //TODO: как быть с длинными названиями
-                        //TODO: странное поведение создание графа только по выбору файла, и потом все ломается
                         var keySuffix = headers.Count > 2 ? $"-{headers[i]}" : "";
                         flattenLines.Add(($"{fields[0]}{keySuffix}", fields[i]));
                     }
@@ -43,7 +41,7 @@ namespace ChartWorld.Infrastructure
             return (headers, result);
         }
         
-        private static IEnumerable<string[]> GetRows(string xlsxPath)
+        private IEnumerable<string[]> GetRows(string xlsxPath)
         {
             using ExcelPackage xlPackage = new ExcelPackage(new FileInfo(xlsxPath));
             
