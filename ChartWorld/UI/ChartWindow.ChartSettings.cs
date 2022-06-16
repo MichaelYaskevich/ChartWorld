@@ -84,8 +84,35 @@ namespace ChartWorld.UI
             }
             else
                 _selectedData = ChartData.Create(ResourceExplorer.PathToResources + _chartDataDdl.SelectedItem);
+            
+            if (_selectedData == null)
+            {
+                var location = new Point(Painter.ScreenSize.Width / 2, 10);
+                var incorrectFileButton = ButtonsFactory.CreateIncorrectFileButton(location);
+                location.X -= incorrectFileButton.Size.Width / 2;
+                incorrectFileButton.Location = location;
+                var okButton = ButtonsFactory.CreateOkButton(
+                    new Point(location.X, location.Y + incorrectFileButton.Size.Height + 10));
+                
+                _form.Controls.Remove(_chartDataDdl);
+                _form.Controls.Remove(_chartTypeDdl);
+                _form.Controls.Add(incorrectFileButton);
+                _form.Controls.Add(okButton);
+
+                okButton.Click += (_, _) => { GoHome(); };
+            }
 
             _form.Update();
+        }
+        
+        private static void GoHome()
+        {
+            _form.Controls.Clear();
+            foreach (var button in ControlButtons)
+                _form.Controls.Add(button);
+            foreach (var entity in _workspace.GetWorkspaceEntities())
+            foreach (var button in EntityHandler.Buttons[entity])
+                    _form.Controls.Add(button);
         }
 
         private static void InitializeChartTypeSelection()
