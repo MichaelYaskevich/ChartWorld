@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChartWorld.Infrastructure;
 using OfficeOpenXml.FormulaParsing.Exceptions;
@@ -38,28 +39,21 @@ namespace ChartWorld.Domain.Chart.ChartData
         public static ChartData Create(string path)
         {
             if (path.EndsWith(".xlsx"))
-                return CreateFromXlsx(path);
-            return path.EndsWith(".csv") ? CreateFromCsv(path) : null;
+                return ParseAndCreate(new XlsxParser(), path);
+            return path.EndsWith(".csv") ? ParseAndCreate(new CsvParser(), path) : null;
         }
 
-        private static ChartData CreateFromCsv(string csvPath)
+        private static ChartData ParseAndCreate(IParser parser, string path)
         {
             try
             {
-                var data = CsvParser.Parse(csvPath);
+                var data = parser.Parse(path);
                 return new ChartData(data);
             }
-            catch (CsvHelper.CsvHelperException _) { return null; }
-        }
-        
-        private static ChartData CreateFromXlsx(string xlsxPath)
-        {
-            try
+            catch (Exception)
             {
-                var data = XlsxParser.Parse(xlsxPath);
-                return new ChartData(data);
+                return null;
             }
-            catch (ExcelErrorValueException _) { return null; }
         }
 
         public IEnumerable<(string, double)> GetOrderedItems()
